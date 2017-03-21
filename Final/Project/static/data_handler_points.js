@@ -46,7 +46,7 @@ function updatePointData(year) {
 };
 
 updatePointData(2015)
-console.log("hello there")
+
 
 
 

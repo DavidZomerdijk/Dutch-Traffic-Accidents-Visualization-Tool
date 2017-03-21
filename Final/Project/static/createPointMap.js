@@ -9,6 +9,34 @@ var map = L.map('pointMap').setView([52.228172, 5.521980], 7);
     }).addTo(map);
 
 
+//creates a point
+function createPoint(locationX, locationY, PointRadius, PointColor) {
+    console.log(locationX, locationY, PointRadius, PointColor);
+
+
+    L.circle([locationX, locationY], PointRadius, {
+         fill: "red",
+         opacity: 0.5}
+    ).addTo(map);
+}
+
+//Generates a variable between 2 numbers
+function randomInRange(min, max) {
+    console.log( Math.random() * (max - min) + min);
+    return Math.random() * (max - min) + min;
+}
+
+//create random points
+function createRandomPoints(Amount, MinLatitude, MaxLatitude, MinLongitude, MaxLongitude, PointRadius, PointColor) {
+    for (var i = 0; i < Amount; i++) {
+        createPoint(randomInRange(MinLatitude, MaxLatitude), randomInRange(MinLongitude, MaxLongitude), PointRadius, PointColor)
+    }
+    console.log("createRandomPoint")
+}
+
+createRandomPoints(200,50,51,4,5,5,"red");
+
+
 
 
 
