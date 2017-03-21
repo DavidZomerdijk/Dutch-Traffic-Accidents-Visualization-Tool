@@ -34,7 +34,8 @@ def data(year= 2015 ):
     #here we add the population data
     outputDict = {}
     for key, value in json.loads(output).items():
-        outputDict[key] = {"accidents": value, "per_capita": round((int(value) / populationData[key] ), 5)}
+        weather = result[(result["PVE_NAAM"] == key)]["WGD_CODE_1"]
+        outputDict[key] = {"weather":weather.value_counts().to_json(orient="columns"), "accidents": value, "per_capita": round((int(value) / populationData[key] ), 5)}
 
     return json.dumps(outputDict)
 
