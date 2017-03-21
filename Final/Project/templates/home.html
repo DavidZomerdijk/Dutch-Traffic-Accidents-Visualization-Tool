@@ -23,16 +23,15 @@
     <script src="../static/js/bootstrap-slider.js"></script>
     <link rel="stylesheet" href="../static/css/bootstrap-slider.css"/>
 
-    <script src="../static/LeafletJS/CreateMap.js"></script>
+    <script src="../static/leaflet/CreateMap.js"></script>
 
 </head>
 <body>
-<h1>Dutch traffic accidents visualization tool.</h1>
 <br>
-<br>
-<div class="row">
+<div class="container-fluid">
+<div class="row content">
 
-    <div class="col-md-5">
+    <div class="col-md-5 text-center">
 
 
         <div id='map'></div>
@@ -168,17 +167,20 @@
     </div>
 </div>
 
-<div class="col-md-10">
-    <div class="col-md-5">
+        <div class="col3">
         <p>Filters </p>
         <p>Gender</p>
         <label class="checkbox-inline "><input type="checkbox" value="">Male</label>
         <label class="checkbox-inline"><input type="checkbox" value="">Female</label>
+        </div>
+        <div class="col-lg-3">
         <p>Age</p>
         <label class="checkbox-inline"><input type="checkbox" value=""><18</label>
         <label class="checkbox-inline"><input type="checkbox" value="">18-30</label>
         <label class="checkbox-inline"><input type="checkbox" value="">30-50</label>
         <label class="checkbox-inline"><input type="checkbox" value="">50+</label>
+        </div>
+        <div class="col-lg-3">
         <p>Weather Conditions</p>
         <label class="checkbox-inline"><input type="checkbox" value="">Storm</label>
         <label class="checkbox-inline"><input type="checkbox" value="">Rain</label>
@@ -186,7 +188,6 @@
         <label class="checkbox-inline"><input type="checkbox" value="">Snow</label>
         <label class="checkbox-inline"><input type="checkbox" value="">Sunny</label>
     </div>
-
     <br>
     <br>
     <!--
@@ -201,6 +202,7 @@
     <br>
     <br>
     -->
+
     <script>
         //map setup
         // CreateMap("mapid", 52.3702, 4.8952, 13);
@@ -211,7 +213,7 @@
         $("#day").slider({});
 
     </script>
-
+</div>
 
 
 </body>
