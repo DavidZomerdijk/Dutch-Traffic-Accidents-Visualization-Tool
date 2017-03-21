@@ -25,6 +25,14 @@
 
     <script src="../static/leaflet/CreateMap.js"></script>
 
+    <!--checkmarks -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="../static/leaflet/FilterManager.js"></script>
+
 </head>
 <body>
 <br>
@@ -170,26 +178,30 @@
         <div class="col-md-3">
 
         <p>Gender</p>
-        <label class="checkbox-inline "><input type="checkbox" value="">Male</label>
-        <label class="checkbox-inline"><input type="checkbox" value="">Female</label>
+        <label  id="male" class="checkbox-inline "><input type="checkbox" value="">Male</label>
+        <label id="female" class="checkbox-inline"><input type="checkbox" value="">Female</label>
         </div>
         <div class="col-md-3">
         <p>Age</p>
-        <label class="checkbox-inline"><input type="checkbox" value=""><18</label>
-        <label class="checkbox-inline"><input type="checkbox" value="">18-30</label>
-        <label class="checkbox-inline"><input type="checkbox" value="">30-50</label>
-        <label class="checkbox-inline"><input type="checkbox" value="">50+</label>
+        <label id="age1" class="checkbox-inline"><input type="checkbox" value=""><18</label>
+        <label id="age2" class="checkbox-inline"><input type="checkbox" value="">18-30</label>
+        <label id="age3" class="checkbox-inline"><input type="checkbox" value="">30-50</label>
+        <label id="age4" class="checkbox-inline"><input type="checkbox" value="">50+</label>
         </div>
         <div class="col-md-3">
         <p>Weather Conditions</p>
-        <label class="checkbox-inline"><input type="checkbox" value="">Storm</label>
-        <label class="checkbox-inline"><input type="checkbox" value="">Rain</label>
-        <label class="checkbox-inline"><input type="checkbox" value="">Fog</label>
-        <label class="checkbox-inline"><input type="checkbox" value="">Snow</label>
-        <label class="checkbox-inline"><input type="checkbox" value="">Sunny</label>
+        <label id="storm" class="checkbox-inline"><input type="checkbox" value="">Storm</label>
+        <label id="rain" class="checkbox-inline"><input type="checkbox" value="">Rain</label>
+        <label id="fog" class="checkbox-inline"><input type="checkbox" value="">Fog</label>
+        <label id="snow" class="checkbox-inline"><input type="checkbox" value="">Snow</label>
+        <label id="sunny" class="checkbox-inline"><input type="checkbox" value="">Sunny</label>
     </div>
     <br>
     <br>
+
+<script>
+
+</script>
     <!--
     Year: <b>2006 </b> <input id="year" type="text" class="span5" value="" data-slider-min="2006" data-slider-max="2017" data-slider-step="1" data-slider-value="[2006,2017]"/> <b> 2017</b>
     <br>
@@ -211,8 +223,8 @@
         // CreateRandomPoints(20, 52, 53, 4, 5, 1000, "red");
 
         //slider values
-        $("#year").slider({});
-        $("#day").slider({});
+     //   $("#year").slider({});
+     //   $("#day").slider({});
 
     </script>
 </div>
