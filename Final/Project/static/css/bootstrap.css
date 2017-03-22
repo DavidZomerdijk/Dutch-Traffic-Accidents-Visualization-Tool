@@ -330,7 +330,7 @@ th {
 
     .table-bordered th,
     .table-bordered td {
-        border: 1px solid #ddd !important;
+        border: 1px solid #b3b3b3 !important;
     }
 }
 
@@ -2068,7 +2068,10 @@ h4 {
 }
 
 .bg-grey {
-    background-color: #f6f6f6;
+    background-color: #dddddd;
+}
+.bg-darkgrey {
+    background-color: #b3b3b3;
 }
 .bg-red {
     background-color: #ff0000;
@@ -3148,7 +3151,7 @@ th {
 }
 
 .table-bordered {
-    border: 1px solid #ddd;
+    border: 1px solid #b3b3b3;
 }
 
 .table-bordered > thead > tr > th,
@@ -3157,7 +3160,7 @@ th {
 .table-bordered > thead > tr > td,
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
-    border: 1px solid #ddd;
+    border: 1px solid #b3b3b3;
 }
 
 .table-bordered > thead > tr > th,

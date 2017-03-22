@@ -16,6 +16,7 @@ d3.select("#info").text( JSON.stringify(d, null, 2) );
     provinceData = d
     //underneath we update the map using a function from show_map
     update_map()
+    updateChart();
 }
 
 // Load the data.
@@ -25,4 +26,3 @@ function update(year) {
     //function that updates map
 };
 update(2009);
-

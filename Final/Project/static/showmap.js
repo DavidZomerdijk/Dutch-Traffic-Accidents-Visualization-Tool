@@ -168,3 +168,23 @@ info.addTo(map);
 
 //adds the legend
 legend.addTo(map);
+
+
+function updateChart(){
+    var accidentsArray = [];
+    jQuery.each(provinceData, function(province) {
+        accidentsArray.push({"provinceName": province, "values" :this});
+    });
+    accidentsArray.sort(sortAccidents);
+
+    sortedAccidentsData = accidentsArray;
+    updateBarChart();
+}
+
+function sortAccidents(a,b) {
+    if (a.values.accidents > b.values.accidents)
+        return -1;
+    if (a.values.accidents < b.values.accidents)
+        return 1;
+    return 0;
+}

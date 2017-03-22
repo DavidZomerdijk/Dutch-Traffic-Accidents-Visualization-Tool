@@ -33,14 +33,24 @@
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script src="../static/leaflet/FilterManager.js"></script>
+<style>
+    .axisHorizontal path{
+        fill: none;
+    }
+
+    .axisHorizontal .tick line {
+        stroke-width: 1;
+        stroke: rgba(0, 0, 0, 0.2);
+    }
+</style>
 
 
 </head>
 <body>
-<div id="about" class="container-fluid ">
+<div id="about" class="container-fluid table-bordered bg-grey ">
     <div class="col-md-12 text-center"><h1>Dutch traffic accidents visualization tool</h1></div>
     <div class="row">
-        <div class="col-sm-6 text-center table-bordered">
+        <div class="col-sm-6 text-center table-bordered ">
 
             <div id='map'></div>
 
@@ -60,9 +70,12 @@
             <script type="text/javascript" src="{{ url_for('static', filename='leaflet/netherlands.js') }}"></script>
             <script type="text/javascript" src="{{ url_for('static', filename='showmap.js') }}"></script>
             <script type="text/javascript" src="{{ url_for('static', filename='data_handler.js') }}"></script>
+            <script type="text/javascript" src="{{ url_for('static', filename='data_handler.js') }}"></script>
+
+
         </div>
 
-        <div class="col-md-6 table-bordered">
+        <div class="col-md-6 ">
             <div class="col-sm-3"> <div id="Province1"></div>Province 1</div>
             <div class="col-sm-9">
                 <div class="progress active">
@@ -175,21 +188,21 @@
     </div>
 </div>
 
-<div class="col-md-12 table-bordered"><p><strong>Filters</strong> </p>
-    <div class="col-md-4 table-bordered">
+<div class="col-md-12 bg-grey"><p><strong>Filters</strong> </p>
+    <div class="col-md-4 ">
 
         <p>Gender</p>
         <label  id="male" class="checkbox-inline "><input type="checkbox" value="">Male</label>
         <label id="female" class="checkbox-inline"><input type="checkbox" value="">Female</label>
     </div>
-    <div class="col-md-4 table-bordered">
+    <div class="col-md-4 ">
         <p>Age</p>
         <label id="age1" class="checkbox-inline"><input type="checkbox" value=""><18</label>
         <label id="age2" class="checkbox-inline"><input type="checkbox" value="">18-30</label>
         <label id="age3" class="checkbox-inline"><input type="checkbox" value="">30-50</label>
         <label id="age4" class="checkbox-inline"><input type="checkbox" value="">50+</label>
     </div>
-    <div class="col-md-4 table-bordered">
+    <div class="col-md-4 ">
         <p>Weather Conditions</p>
         <label id="storm" class="checkbox-inline"><input type="checkbox" value="">Storm</label>
         <label id="rain" class="checkbox-inline"><input type="checkbox" value="">Rain</label>
@@ -197,6 +210,7 @@
         <label id="snow" class="checkbox-inline"><input type="checkbox" value="">Snow</label>
         <label id="sunny" class="checkbox-inline"><input type="checkbox" value="">Sunny</label>
     </div>
+    <!--<script type="text/javascript" src="../static/js/ShowBarChart.js"/>-->
 </div>
 
 <script>
@@ -227,6 +241,7 @@ Day 00:00: <b>0</b> <input id="day" type="text" class="span5" value="" data-slid
     //   $("#day").slider({});
 
 </script>
+
 </div>
 
 
