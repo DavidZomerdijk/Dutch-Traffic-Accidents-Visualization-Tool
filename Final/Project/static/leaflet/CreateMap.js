@@ -23,14 +23,14 @@ function CreateMarker(Latitude, Longitude, MarkerText, PopUpText) {
 }
 
 //creates a point
-function createPoint(locationX, locationY, PointRadius, PointColor) {
-    console.log(locationX, locationY, PointRadius, PointColor);
-    L.circle([locationX, locationY], PointRadius, {
-        color: PointColor,
-        fillColor: '#f03',
-        fillOpacity: 0.5
-    }).addTo(mymap).bindPopup("I am a circle.");
-}
+//function createPoint(locationX, locationY, PointRadius, PointColor) {
+//    console.log(locationX, locationY, PointRadius, PointColor);
+//    L.circle([locationX, locationY], PointRadius, {
+//        color: PointColor,
+//        fillColor: '#f03',
+//        fillOpacity: 0.5
+//    }).addTo(mymap).bindPopup("I am a circle.");
+//}
 
 //Generates a variable between 2 numbers
 function randomInRange(min, max) {

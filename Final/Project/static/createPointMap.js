@@ -1,6 +1,6 @@
 //sets the view
 var map = L.map('pointMap').setView([52.228172, 5.521980], 7);
-
+var pointLayer = null
 
 //determines the background (thus the map)
  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -10,30 +10,34 @@ var map = L.map('pointMap').setView([52.228172, 5.521980], 7);
 
 
 //creates a point
-function createPoint(x,y, pointRadius, pointColor) {
-    L.circle([x,y], pointRadius, {
-         fill: pointColor,
-         opacity: 0.5}
-    ).addTo(map);
+function createPoint(lat,lon, pointRadius, pointColor) {
+    return L.circle([lat,lon], pointRadius, {
+         fillColor: pointColor,
+         fillOpacity: 0.5,
+         weight: 0
+         }
+    )
 }
 
 function show_points(d){
-    clearMap()
-     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        maxZoom: 18,
-        id: 'mapbox.streets'
-    }).addTo(map);
+    if(pointLayer != null){
+        map.removeLayer(pointLayer);
+    }
 
+    var points = []
     var lat
     var long;
     for (var i = 0; i < d.length ; i++){
         lat = d[i]['lat']
         lon = d[i]['lon']
-        createPoint(lat,lon, 5, 'red' )
+        points.push( createPoint(lat,lon, 20, 'orange' ))
     }
+    pointLayer = L.layerGroup(points).addTo(map)
+    map.addLayer(pointLayer)
 }
 
 function clearMap(){
+    console.log(map)
     for (i in map._layers) {
         if (map._layers[i].options.format == undefined) {
             try {
