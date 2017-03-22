@@ -1,7 +1,6 @@
 
 
 var zoom = function (bounds) {
-    console.log(JSON.stringify( bounds))
     map.fitBounds(  bounds.bounds )
 }
 
@@ -30,8 +29,7 @@ var show_info = function (d) {
 };
 
 var callback = function (d) {
-d3.select("#info").text( JSON.stringify(d, null, 2) );
-    console.log(d[0])
+//d3.select("#info").text( JSON.stringify(d, null, 2) );
     show_points(d)
 }
 
@@ -41,6 +39,9 @@ function updatePointData(year) {
     d3.json("/dataCoordinates/" + String(year), callback)
     //function that updates map
 };
+
+function updateDangerPoints(){
+}
 
 updatePointData(2015)
 
