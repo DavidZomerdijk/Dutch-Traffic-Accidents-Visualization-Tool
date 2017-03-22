@@ -46,6 +46,8 @@ def data(year= 2015 ):
 currentProvince = "Noord-Holland"
 provinceBounds = {'_northEast': {'lat': 53.184795, 'lng': 5.316834}, '_southWest': {'lat': 52.165467, 'lng': 4.493821}}
 
+
+
 @app.route("/pointMap")
 @app.route("/pointMap/<province>")
 def pointMap(province="Noord-Holland"):
@@ -67,7 +69,7 @@ def province( ):
 def postProvinceBounds():
     global provinceBounds
     provinceBounds = flask.request.get_json()
-    return "" #flask.jsonify({"david": 23})
+    return ""
 
 @app.route("/getProvinceBounds" )
 def getProvinceBounds():
@@ -83,17 +85,34 @@ def getProvinceBounds():
 @app.route("/dataCoordinates")
 @app.route("/dataCoordinates/<int:year>")
 def dataCoordinates(year= 2015 ):
-    result = accidentData[ (accidentData["JAAR_VKL"] == year)]
-    output = result[result["PVE_NAAM"] == currentProvince][['lat', 'lon']]
+    jaar = year
+    data_filtered = accidentData[ (accidentData["JAAR_VKL"] == year)]
+    output = data_filtered[data_filtered["PVE_NAAM"] == currentProvince][['lat', 'lon']]
     return output.to_json(orient="records")
 
 
-def dangerPoints(df, number_of_accidents, d=10):
+@app.route("/dangerousPoints")
+def dangerousPoints(year=2015):
+    data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
+    return flask.jsonify( {"dangerousPoints" : dangerPoints(data_filtered)})
+
+def dangerPoints(df, number_of_accidents=10, d=10):
     x = df[["VKL_NUMMER", "X_COORD", "Y_COORD", "lat", "lon"]].sort(["X_COORD", "Y_COORD"],
                                                                     ascending=[1, 1]).reset_index(drop=True)
+    def getDangerBounds(accidentPoints):
+        output2 = []
+        for x in accidentPoints:
+            tempDict = {}
+            tempDict["Number_of_accidents"] = len(x)
+
+            lats = [p[1] for p in x]
+            longs = [p[2] for p in x]
+            tempDict["bounds"] = [[min(lats), min(longs)], [max(lats), max(longs)]]
+            output2.append(tempDict)
+        return output2
+
     output = []
     temp = []
-    print(len(x.index))
     for i in range(1, len(x.index)):
         a = x.loc[i - 1]
         b = x.loc[i]
@@ -110,14 +129,14 @@ def dangerPoints(df, number_of_accidents, d=10):
             output.append(temp)
             temp = []
 
-    print("not_sorted")
     output.sort(key=len, reverse=True)
-    print(len(output))
-    return output[:10]
+
+    return getDangerBounds(output[:10])
 
 if __name__ == "__main__":
     # load accident data
     accidentData = pickle.load(open( PATH_TO_DATA, "rb" ) )
+    data_filtered = data
     # import population data
     with open("static/data/population.json") as f:
         populationData = json.load(f)

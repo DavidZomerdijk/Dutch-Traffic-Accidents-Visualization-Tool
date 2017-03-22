@@ -36,18 +36,7 @@ function show_points(d){
     map.addLayer(pointLayer)
 }
 
-function clearMap(){
-    console.log(map)
-    for (i in map._layers) {
-        if (map._layers[i].options.format == undefined) {
-            try {
-                map.removeLayer(map._layers[i]);
-            } catch (e) {
-                console.log("problem with " + e + map._layers[i]);
-            }
-        }
-    }
-}
+
 
 //createRandomPoints(1,50,51,4,5,5,"red");
 //createPoint(, 597775, 5, 'red' )
