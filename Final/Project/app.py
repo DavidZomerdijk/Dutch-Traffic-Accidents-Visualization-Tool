@@ -84,7 +84,7 @@ def getProvinceBounds():
 @app.route("/dataCoordinates/<int:year>")
 def dataCoordinates(year= 2015 ):
     result = accidentData[ (accidentData["JAAR_VKL"] == year)]
-    output = result[result["PVE_NAAM"] == currentProvince][['X_COORD', 'Y_COORD']]
+    output = result[result["PVE_NAAM"] == currentProvince][['lat', 'lon']]
     return output.to_json(orient="records")
 
 

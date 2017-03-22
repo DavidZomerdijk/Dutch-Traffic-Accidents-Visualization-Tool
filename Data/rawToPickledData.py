@@ -5,6 +5,8 @@ Description: This file will load the
 import pandas as pd
 from collections import defaultdict
 import pickle
+from Converter import *
+import numpy as np
 
 PATH_RAW_DATA = "raw/"
 FILENAME = "verkeersOngelukkenNederland"
@@ -35,6 +37,9 @@ def importData(path, min_year, max_year):
 
     data = pd.merge(ongelukkenData, puntLocaties, how='left' ,left_on='FK_VELD5', right_on='FK_VELD5')
 
+    converter = Converter()
+    data["lat"] = data.apply(lambda row: converter.toLat( row["X_COORD"], row["Y_COORD"]), axis=1)
+    data["lon"] = data.apply(lambda row: converter.toLon( row["X_COORD"], row["Y_COORD"]), axis=1)
     #write to csv
     data.to_csv(FILENAME+".csv", sep='\t', encoding='utf-8' )
 

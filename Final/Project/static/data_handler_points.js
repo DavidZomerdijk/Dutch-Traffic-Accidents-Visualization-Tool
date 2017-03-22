@@ -31,11 +31,8 @@ var show_info = function (d) {
 
 var callback = function (d) {
 d3.select("#info").text( JSON.stringify(d, null, 2) );
-    //here we define the data variable
-    provinceData = d
-
-    //underneath we update the map using a function from show_map
-    //update_map()
+    console.log(d[0])
+    show_points(d)
 }
 
 // Load the data.
