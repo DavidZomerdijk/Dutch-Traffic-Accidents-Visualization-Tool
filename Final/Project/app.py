@@ -88,6 +88,32 @@ def dataCoordinates(year= 2015 ):
     return output.to_json(orient="records")
 
 
+def dangerPoints(df, number_of_accidents, d=10):
+    x = df[["VKL_NUMMER", "X_COORD", "Y_COORD", "lat", "lon"]].sort(["X_COORD", "Y_COORD"],
+                                                                    ascending=[1, 1]).reset_index(drop=True)
+    output = []
+    temp = []
+    print(len(x.index))
+    for i in range(1, len(x.index)):
+        a = x.loc[i - 1]
+        b = x.loc[i]
+        addedToTemp = False
+
+        if b["X_COORD"] - a["X_COORD"] < d:
+            if b["Y_COORD"] - a["Y_COORD"] < d:
+                if temp == []:
+                    temp.append([a["VKL_NUMMER"], a["lat"], a["lon"]])
+                temp.append([b["VKL_NUMMER"], b["lat"], b["lon"]])
+                addedToTemp = True
+
+        if not addedToTemp and temp != []:
+            output.append(temp)
+            temp = []
+
+    print("not_sorted")
+    output.sort(key=len, reverse=True)
+    print(len(output))
+    return output[:10]
 
 if __name__ == "__main__":
     # load accident data
