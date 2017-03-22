@@ -24,7 +24,7 @@ d3.select("#slider").on("input", function() {
 });
 
 
-// Show the information about a particular point.
+// Show the information about a particular pointMap.
 var show_info = function (d) {
     d3.select("#info").text( d );
 };
