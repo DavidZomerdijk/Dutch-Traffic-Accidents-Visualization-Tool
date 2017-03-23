@@ -33,7 +33,9 @@ function update(year) {
     d3.json("/data/" + String(year), callback)
     //function that updates map
 
+        //updateweer(weather);
 };
+
 function updateweer(weer) {
     d3.json("/data/" + selected_year + "/" + String(weathercondition), callback);
         //underneath we update the map using a function from show_map
@@ -41,4 +43,3 @@ function updateweer(weer) {
     updateChart();
     }
 update(2009);
-updateweer(weathercondition)

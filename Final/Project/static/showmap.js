@@ -22,6 +22,7 @@ info.update = function(props, data) {
             : 'Hover over a state');
 };
 
+
 //controls the colors for the provinces
 function getColor(d) {
     return d > 0.01 ? '#800026' :
@@ -49,6 +50,10 @@ function style(feature) {
 function fillProvinces(feature) {
     //alert("fillprovincies");
     var province = feature.properties.OMSCHRIJVI
+    if(provinceData[ province ]["per_capita"] == null)
+    {
+        provinceData[ province ]["per_capita"] = 0;
+    }
     var accidents = provinceData[ province ]["per_capita"]
 
     return getColor(accidents);

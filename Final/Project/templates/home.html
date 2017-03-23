@@ -2,52 +2,53 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dutch traffic accidents visualization tool</title>
+    <title>Dutch traffic accidents visualization tool</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
-<script src="http://d3js.org/d3.v2.js"></script>
-<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+    <script src="http://d3js.org/d3.v2.js"></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
 
-<!--import css -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-<!--import javascript -->
-<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <!--import css -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <!--import javascript -->
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
-<link rel="stylesheet" href="../static/css/bootstrap.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<script src="../static/js/bootstrap-slider.js"></script>
-<link rel="stylesheet" href="../static/css/bootstrap-slider.css"/>
+    <script src="../static/js/bootstrap-slider.js"></script>
+    <link rel="stylesheet" href="../static/css/bootstrap-slider.css"/>
 
-<script src="../static/leaflet/CreateMap.js"></script>
-
-<!--checkmarks -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-<script src="../static/leaflet/FilterManager.js"></script>
+    <!--checkmarks -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="../static/leaflet/FilterManager.js"></script>
 
     <!-- Pie Charts -->
     <script type="text/javascript" src="//cdn.jsdelivr.net/snap.svg/0.1.0/snap.svg-min.js"></script>
     <script src="../static/js/Charts.js"></script>
 
-<style>
-    .axisHorizontal path{
-        fill: none;
-    }
+    <!-- Bar Chart -->
+    <script src="../static/js/ShowBarChart.js"></script>
 
-    .axisHorizontal .tick line {
-        stroke-width: 1;
-        stroke: rgba(0, 0, 0, 0.2);
-    }
-</style>
+    <style>
+        .axisHorizontal path{
+            fill: none;
+        }
+
+        .axisHorizontal .tick line {
+            stroke-width: 1;
+            stroke: rgba(0, 0, 0, 0.2);
+        }
+    </style>
 
 
 </head>
@@ -57,7 +58,7 @@
     <div class="row">
         <div class="col-sm-6 text-center table-bordered ">
 
-            <div id='map'></div>
+            <div id='map' style="min-height: 700px"></div>
 
             <!--slider for years -->
             <input type="range" value=2009 min=2003 max=2015 id="slider" >
@@ -79,295 +80,189 @@
 
 
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 ">
             <div id="container"></div>
-            <button id="plain">Plain</button>
             <button id="inverted">Inverted</button>
+            <button id="plain">Plain</button>
             <button id="polar">Polar</button>
-            </div>
+        </div>
 
-     <!--   <div id="exTab3" class="container col-md-6">
-            <ul  class="nav nav-pills">
-                <li class="active">
-                    <a  href="#1b" data-toggle="tab">Bar Chart</a>
-                </li>
-                <li><a href="#2b" data-toggle="tab">Pie chart</a>
-                </li>
-            </ul>
+        <div class="col-md-6"><br></div>
+        <div class="col-md-2 table-bordered">
 
-            <div class="tab-content clearfix">
-                <div class="tab-pane active col-md-12" id="1b">
-                    <div class="col-md-12 ">
-                        <div class="col-sm-3"> <div id="Province1"></div>Province 1</div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:90%">
-                                    <div id="Province1Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province2"></div>Province 2</div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%">
-                                    <div id="Province2Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province3"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width:75%">
-                                    <div id="Province3Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province4"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:60%">
-                                    <div id="Province4Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province5"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" style="width:55%">
-                                    <div id="Province5Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province6"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                                    <div id="Province6Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province7"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width:35%">
-                                    <div id="Province7Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province8"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width:35%">
-                                    <div id="Province8Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province9"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%">
-                                    <div id="Province9Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province10"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width:15%">
-                                    <div id="Province10Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province11"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:10%">
-                                    <div id="Province11Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3"> <div id="Province12"></div></div>
-                        <div class="col-sm-9">
-                            <div class="progress active">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" style="width:5%">
-                                    <div id="Province12Percentage"></div> %
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              <!--  <div class="tab-pane col-md-12 table-bordered" id="2b">
-                    <div class="col-md-4 table-bordered">
-                        <ul data-pie-id="svg">
-                            <li data-value="60">Water Buffalo (60)</li>
-                            <li data-value="20">Bison (20)</li>
-                            <li data-value="12">Sheep (12)</li>
-                            <li data-value="32">Goat (32)</li>
-                            <li data-value="50">Shetland Pony (50)</li>
-                            <li data-value="60">Water Buffalo (60)</li>
-                            <li data-value="20">Bison (20)</li>
-                            <li data-value="12">Sheep (12)</li>
-                            <li data-value="32">Goat (32)</li>
-                            <li data-value="50">Shetland Pony (50)</li>
-                            <li data-value="60">Water Buffalo (60)</li>
-                            <li data-value="20">Bison (20)</li>
-                            <li data-value="12">Sheep (12)</li>
-                            <li data-value="32">Goat (32)</li>
-                            <li data-value="50">Shetland Pony (50)</li>
-                        </ul>
-                    </div>
-
-                    </div>
-                </div>-->
-
-
+            <p><strong>Gender</strong></p>
+            <label  id="male" class="checkbox-inline "><input type="checkbox" value="">Male</label>
+            <label id="female" class="checkbox-inline"><input type="checkbox" value="">Female</label>
+        </div>
+        <div class="col-md-3 table-bordered">
+            <p><strong>Age</strong></p>
+            <label id="age1" class="checkbox-inline"><input type="checkbox" value=""><18</label>
+            <label id="age2" class="checkbox-inline"><input type="checkbox" value="">18-30</label>
+            <label id="age3" class="checkbox-inline"><input type="checkbox" value="">30-50</label>
+            <label id="age4" class="checkbox-inline"><input type="checkbox" value="">50+</label>
+        </div>
+        <div class="col-md-4 table-bordered">
+            <p><strong>Weather Conditions</strong></p>
+            <label id="storm" class="checkbox-inline"><input type="checkbox" value="">Storm</label>
+            <label id="rain" class="checkbox-inline"><input type="checkbox" value="">Rain</label>
+            <label id="fog" class="checkbox-inline"><input type="checkbox" value="">Fog</label>
+            <label id="snow" class="checkbox-inline"><input type="checkbox" value="">Snow</label>
+            <label id="sunny" class="checkbox-inline"><input type="checkbox" value="">Sunny</label>
+        </div>
+        <select id ="weather" class="col-md-1" name="weather" onmousedown="this.value='';" onchange="weather(this.value);">
+            <option value="all">All</option>
+            <option value="D">Dry</option>
+            <option value="R">Rain</option>
+            <option value="M">Mist</option>
+            <option value="S">Snow/hail</option>
+            <option value="H">Hard wind</option>
+            <option value="O">Unknown</option>
+        </select>
     </div>
+
 </div>
 
-<div class="col-md-12 bg-grey"><p><strong>Filters</strong> </p>
-    <div class="col-md-4 ">
 
-        <p>Gender</p>
-        <label  id="male" class="checkbox-inline "><input type="checkbox" value="">Male</label>
-        <label id="female" class="checkbox-inline"><input type="checkbox" value="">Female</label>
-    </div>
-    <div class="col-md-4 ">
-        <p>Age</p>
-        <label id="age1" class="checkbox-inline"><input type="checkbox" value=""><18</label>
-        <label id="age2" class="checkbox-inline"><input type="checkbox" value="">18-30</label>
-        <label id="age3" class="checkbox-inline"><input type="checkbox" value="">30-50</label>
-        <label id="age4" class="checkbox-inline"><input type="checkbox" value="">50+</label>
-    </div>
-    <div class="col-md-4 ">
-        <p>Weather Conditions</p>
-        <label id="storm" class="checkbox-inline"><input type="checkbox" value="">Storm</label>
-        <label id="rain" class="checkbox-inline"><input type="checkbox" value="">Rain</label>
-        <label id="fog" class="checkbox-inline"><input type="checkbox" value="">Fog</label>
-        <label id="snow" class="checkbox-inline"><input type="checkbox" value="">Snow</label>
-        <label id="sunny" class="checkbox-inline"><input type="checkbox" value="">Sunny</label>
-    </div>
+<!--<canvas id="myChart"></canvas>-->
 
-<br>
-    <br>
-
-
-            <div class="col-md-3">
-                <ul data-pie-id="my-cool-chart" data-options='{"donut": "true"}'>
-                    <li data-value="36">Pepperoni</li>
-                    <li data-value="14">Sausage</li>
-                    <li data-value="8">Cheese</li>
-                    <li data-value="11">Mushrooms</li>
-                    <li data-value="7">Chicken</li>
-                    <li data-value="24">Other</li>
-                </ul>
-
-            </div>
-            <div class="col-md-3">
-                <div id="my-cool-chart"></div>
-            </div>
-
-    <div class=" col-md-8 table-bordered" id="svg" ></div>
-
-
-
-    <canvas id="myChart"></canvas>
-    <!--<script type="text/javascript" src="../static/js/ShowBarChart.js"/>-->
+<!--<script type="text/javascript" src="../static/js/ShowBarChart.js"/>-->
 </div>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<div id="container2" class="col-md-6 bg-grey" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+<div id="container3" class="col-md-6 bg-grey" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
 
 
 <script>
-    var chart = Highcharts.chart('container', {
 
+    ////////////
+    // Age categories
+    var categories = ['0-4', '5-9', '10-14', '15-19',
+        '20-24', '25-29', '30-34', '35-39', '40-44',
+        '45-49', '50-54', '55-59', '60-64', '65-69',
+        '70-74', '75-79', '80-84', '85-89', '90-94',
+        '95-99', '100 + '];
+    $(document).ready(function () {
+        Highcharts.chart('container2', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Population pyramid for Germany, 2015'
+            },
+            subtitle: {
+                text: 'Source: <a href="http://populationpyramid.net/germany/2015/">Population Pyramids of the World from 1950 to 2100</a>'
+            },
+            xAxis: [{
+                categories: categories,
+                reversed: false,
+                labels: {
+                    step: 1
+                }
+            }, { // mirror axis on right side
+                opposite: true,
+                reversed: false,
+                categories: categories,
+                linkedTo: 0,
+                labels: {
+                    step: 1
+                }
+            }],
+            yAxis: {
+                title: {
+                    text: null
+                },
+                labels: {
+                    formatter: function () {
+                        return Math.abs(this.value) + '%';
+                    }
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
+                    'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+                }
+            },
+
+            series: [{
+                name: 'Male',
+                data: [-2.2, -2.2, -2.3, -2.5, -2.7, -3.1, -3.2,
+                    -3.0, -3.2, -4.3, -4.4, -3.6, -3.1, -2.4,
+                    -2.5, -2.3, -1.2, -0.6, -0.2, -0.0, -0.0]
+            }, {
+                name: 'Female',
+                data: [2.1, 2.0, 2.2, 2.4, 2.6, 3.0, 3.1, 2.9,
+                    3.1, 4.1, 4.3, 3.6, 3.4, 2.6, 2.9, 2.9,
+                    1.8, 1.2, 0.6, 0.1, 0.0]
+            }]
+        });
+    });
+
+    ///////////////////
+    Highcharts.chart('container3', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
         title: {
-            text: 'Chart.update'
+            text: 'Browser market shares January, 2015 to May, 2015'
         },
-
-        subtitle: {
-            text: 'Plain'
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
-
-        xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
         },
-
         series: [{
-            type: 'column',
+            name: 'Brands',
             colorByPoint: true,
-            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
-            showInLegend: false
+            data: [{
+                name: 'Microsoft Internet Explorer',
+                y: 56.33
+            }, {
+                name: 'Chrome',
+                y: 24.03,
+                sliced: true,
+                selected: true
+            }, {
+                name: 'Firefox',
+                y: 10.38
+            }, {
+                name: 'Safari',
+                y: 4.77
+            }, {
+                name: 'Opera',
+                y: 0.91
+            }, {
+                name: 'Proprietary or Undetectable',
+                y: 0.2
+            }]
         }]
-
     });
-
-
-    $('#plain').click(function () {
-        chart.update({
-            chart: {
-                inverted: false,
-                polar: false
-            },
-            subtitle: {
-                text: 'Plain'
-            }
-        });
-    });
-
-    $('#inverted').click(function () {
-        chart.update({
-            chart: {
-                inverted: true,
-                polar: false
-            },
-            subtitle: {
-                text: 'Inverted'
-            }
-        });
-    });
-
-    $('#polar').click(function () {
-        chart.update({
-            chart: {
-                inverted: false,
-                polar: true
-            },
-            subtitle: {
-                text: 'Polar'
-            }
-        });
-    });
-
 </script>
-<!--
-Year: <b>2006 </b> <input id="year" type="text" class="span5" value="" data-slider-min="2006" data-slider-max="2017" data-slider-step="1" data-slider-value="[2006,2017]"/> <b> 2017</b>
-<br>
-<br>
-
-Day 00:00: <b>0</b> <input id="day" type="text" class="span5" value="" data-slider-min="0" data-slider-max="24" data-slider-step="1" data-slider-value="[0,24]"/> <b> Night 24:00</b>
-<br>
-<br>
-
-<br>
-<br>
--->
-
-<br>
-<br>
 <script>
     //map setup
     // CreateMap("mapid", 52.3702, 4.8952, 13);
@@ -378,8 +273,6 @@ Day 00:00: <b>0</b> <input id="day" type="text" class="span5" value="" data-slid
     //   $("#day").slider({});
 
 </script>
-
-</div>
 
 
 </body>

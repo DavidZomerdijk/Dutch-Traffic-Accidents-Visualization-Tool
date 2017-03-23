@@ -1,93 +1,88 @@
+var chart;
 function updateBarChart(){
-    console.log(sortedAccidentsData);
 
-    data = sortedAccidentsData;
+    console.log(sortedAccidentsData.length);
+    xAxisCategories = [];
+    seriesData = [];
 
-    //updateData(data);
-    var div = document.getElementById("barChart");;
+    /*for (var i = 0; i < sortedAccidentsData.length; i++) {
+     alert('hello');
+     //xAxisCategories.push(sortedAccidentsData[i].provinceName);
+     //seriesData.push(sortedAccidentsData[i].values.accidents);
 
-    var axisMargin = 20,
-        margin = 40,
-        valueMargin = 4,
-        width = parseInt(d3.select('body').style('width'), 10),
-        height = parseInt(d3.select('body').style('height'), 10),
-        barHeight = (height-axisMargin-margin*2)* 0.4/data.length,
-        barPadding = (height-axisMargin-margin*2)*0.6/data.length,
-        data, bar, svg, scale, xAxis, labelWidth = 0;
+     }*/
 
-    max = d3.max(data, function(d) { return d.values.accidents; });
+    sortedAccidentsData.forEach(function(province) {
+        xAxisCategories.push(province.provinceName);
+        seriesData.push(province.values.accidents);
+    });
 
-    svg = d3.select('body')
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
+    console.log(xAxisCategories);
+    console.log(seriesData);
 
-    bar = svg.selectAll("g")
-        .data(data)
-        .enter()
-        .append("g");
+     chart = Highcharts.chart('container', {
 
-    bar.attr("class", "bar")
-        .attr("cx",0)
-        .attr("transform", function(d, i) {
-            return "translate(" + margin + "," + (i * (barHeight + barPadding) + barPadding) + ")";
+        title: {
+            text: 'Accidents'
+        },
+
+        subtitle: {
+            text: 'per province'
+        },
+
+        xAxis: {
+            categories: xAxisCategories//['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+
+        series: [{
+            type: 'column',
+            colorByPoint: true,
+            data: seriesData,//[29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+            showInLegend: false
+        }],
+         chart:{
+             inverted:true
+         }
+
+
+
+    });
+
+
+    $('#plain').click(function () {
+        chart.update({
+            chart: {
+                inverted: false,
+                polar: false
+            },
+            subtitle: {
+                text: 'Plain'
+            }
         });
+    });
 
-    bar.append("text")
-        .attr("class", "label")
-        .attr("y", barHeight / 2)
-        .attr("dy", ".35em") //vertical align middle
-        .text(function(d){
-            return d.provinceName;
-        }).each(function() {
-            labelWidth = Math.ceil(Math.max(labelWidth, this.getBBox().width));
+    $('#inverted').click(function () {
+        console.log("test");
+        chart.update({
+            chart: {
+                inverted: true,
+                polar: false
+            },
+            subtitle: {
+                text: 'Inverted'
+            }
         });
+    });
 
-    scale = d3.scale.linear()
-        .domain([0, max])
-        .range([0, width - margin*2 - labelWidth]);
-
-    xAxis = d3.svg.axis()
-        .scale(scale)
-        .tickSize(-height + 2*margin + axisMargin)
-        .orient("bottom");
-
-    bar.append("rect")
-        .attr("transform", "translate("+labelWidth+", 0)")
-        .attr("height", barHeight)
-        .attr("width", function(d){
-            return scale(d.values.accidents);
+    $('#polar').click(function () {
+        chart.update({
+            chart: {
+                inverted: false,
+                polar: true
+            },
+            subtitle: {
+                text: 'Polar'
+            }
         });
-
-    bar.append("text")
-        .attr("class", "value")
-        .attr("y", barHeight / 2)
-        .attr("dx", -valueMargin + labelWidth) //margin right
-        .attr("dy", ".35em") //vertical align middle
-        .attr("text-anchor", "end")
-        .text(function(d){
-            return (d.values.accidents+"%");
-        })
-        .attr("x", function(d){
-            var width = this.getBBox().width;
-            return Math.max(width + valueMargin, scale(d.values.accidents));
-        });
-
-    bar
-        .on("mousemove", function(d){
-            div.style("left", d3.event.pageX+10+"px");
-            div.style("top", d3.event.pageY-25+"px");
-            div.style("display", "inline-block");
-            div.html((d.provinceName)+"<br>"+(d.values.accidents)+"%");
-        });
-    bar
-        .on("mouseout", function(d){
-            div.style("display", "none");
-        });
-
-    svg.insert("g",":first-child")
-        .attr("class", "axisHorizontal")
-        .attr("transform", "translate(" + (margin + labelWidth) + ","+ (height - axisMargin - margin)+")")
-        .call(xAxis);
+    });
 }
-// No newline at end of file
