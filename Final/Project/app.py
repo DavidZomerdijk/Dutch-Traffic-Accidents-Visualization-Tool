@@ -27,8 +27,13 @@ def index():
 
 @app.route("/data")
 @app.route("/data/<int:year>")
-def data(year= 2015 ):
-    result = accidentData[ (accidentData["JAAR_VKL"] == year)]
+@app.route("/data/<int:year>/<weer>")
+def data(year= 2015, weer = "all" ):
+    if weer == "all":
+        result = accidentData[ accidentData["JAAR_VKL"] == year   ]
+    else:
+        result = accidentData[ accidentData["JAAR_VKL"] == year   ][accidentData["WGD_CODE_1"] == str(weer)]
+
     output = result["PVE_NAAM"].value_counts().to_json(orient="columns")
 
     #here we add the population data
