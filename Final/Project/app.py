@@ -85,13 +85,13 @@ def getProvinceBounds():
 @app.route("/dataCoordinates")
 @app.route("/dataCoordinates/<int:year>")
 def dataCoordinates(year= 2015 ):
-    jaar = year
     data_filtered = accidentData[ (accidentData["JAAR_VKL"] == year)]
     output = data_filtered[data_filtered["PVE_NAAM"] == currentProvince][['lat', 'lon']]
     return output.to_json(orient="records")
 
 
 @app.route("/dangerousPoints")
+@app.route("/dangerousPoints/<int:year>")
 def dangerousPoints(year=2015):
     data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
     return flask.jsonify( {"dangerousPoints" : dangerPoints(data_filtered)})
@@ -118,8 +118,8 @@ def dangerPoints(df, number_of_accidents=10, d=10):
         b = x.loc[i]
         addedToTemp = False
 
-        if b["X_COORD"] - a["X_COORD"] < d:
-            if b["Y_COORD"] - a["Y_COORD"] < d:
+        if abs(b["X_COORD"] - a["X_COORD"] )< d:
+            if abs(b["Y_COORD"] - a["Y_COORD"]) < d:
                 if temp == []:
                     temp.append([a["VKL_NUMMER"], a["lat"], a["lon"]])
                 temp.append([b["VKL_NUMMER"], b["lat"], b["lon"]])

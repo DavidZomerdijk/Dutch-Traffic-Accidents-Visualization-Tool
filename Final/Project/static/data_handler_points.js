@@ -65,11 +65,20 @@ var dangerCallback = function (d) {
     }
 
     var points = []
-    for (var i = 0; i < d.dangerousPoints.length ; i++){
 
-        rect = L.rectangle(d.dangerousPoints[i].bounds, {color: 'blue', weight: 1})
-        points.push( rect)
-    }
+    //zoom to most dangerous spot
+    map.fitBounds(  d.dangerousPoints[0].bounds )
+
+    for (var i = 0; i < d.dangerousPoints.length ; i++){
+        //if(bounds[0][0] == bounds[1][0] && bounds[0][1] == bounds[1][1]){
+
+//        rect = L.rectangle(d.dangerousPoints[i].bounds, {fillcolor: 'blue', weight: 3})
+
+        //}else{
+
+        rect = L.rectangle(d.dangerousPoints[i].bounds, {fillcolor: 'blue', weight: 3})
+        points.push( rect)}
+
     dangerLayer = L.layerGroup(points).addTo(map)
     map.addLayer(dangerLayer)
     //    var bounds = [[53.912257, 27.581640], [53.902257, 27.561640]];
@@ -78,7 +87,7 @@ var dangerCallback = function (d) {
 
 function updateDangerPoints(){
     console.log("button is clicked");
-    d3.json("/dangerousPoints/", dangerCallback)
+    d3.json("/dangerousPoints/"  + String(year) , dangerCallback)
 
 }
 

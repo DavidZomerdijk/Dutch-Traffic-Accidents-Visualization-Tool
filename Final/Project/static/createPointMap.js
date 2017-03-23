@@ -30,7 +30,7 @@ function show_points(d){
     for (var i = 0; i < d.length ; i++){
         lat = d[i]['lat']
         lon = d[i]['lon']
-        points.push( createPoint(lat,lon, 20, 'orange' ))
+        points.push( createPoint(lat,lon, 30, 'red' ))
     }
     pointLayer = L.layerGroup(points).addTo(map)
     map.addLayer(pointLayer)
