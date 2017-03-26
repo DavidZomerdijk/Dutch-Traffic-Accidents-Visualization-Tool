@@ -10,10 +10,10 @@ var pointLayer = null
 
 
 //creates a point
-function createPoint(lat,lon, pointRadius, pointColor) {
+function createPoint(lat,lon, pointRadius, opacity ,  pointColor) {
     return L.circle([lat,lon], pointRadius, {
          fillColor: pointColor,
-         fillOpacity: 0.5,
+         fillOpacity: opacity,
          weight: 0
          }
     )
@@ -30,7 +30,11 @@ function show_points(d){
     for (var i = 0; i < d.length ; i++){
         lat = d[i]['lat']
         lon = d[i]['lon']
-        points.push( createPoint(lat,lon, 30, 'red' ))
+
+
+        points.push( createPoint(lat,lon, 40, 0.5,'red' ))
+
+
     }
     pointLayer = L.layerGroup(points).addTo(map)
     map.addLayer(pointLayer)

@@ -1,5 +1,6 @@
 // control that shows state info on hover
 var info = L.control();
+var provinceData;
 
 info.onAdd = function (map) {
     this._div = L.DomUtil.create('div', 'info');
