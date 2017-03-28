@@ -13,7 +13,9 @@ ZoomToProvince()
 
 $(document).ready(function(){
     $('#dangerPointButton').click(function(){
-       updateDangerPoints();
+       var distance = $("#dangerDrop").val();
+       updateDangerPoints(distance);
+
     });
   });
 
@@ -58,17 +60,30 @@ function updatePointData() {
 var street ;
 
 //standard button for dangerous accidents
-var inf = L.control({position:topright})
-    inf.onAdd= function(map){
-        var htmlText = '<div id="dangerButton">'
-
+var inf2 = L.control({position:"topright"})
+    inf2.onAdd= function(map){
+        var div = L.DomUtil.create('div', 'title')
+        var htmlText = '<div id="dangerButton"> ';
+        //htmlText = htmlText.concat( '<div id="dangerButton2">Find the dangerous locations in this province</div>')
+        htmlText = htmlText.concat( '<div id="DangerQuestion">')
+        htmlText = htmlText.concat('Cluster accidents ')
+        htmlText = htmlText.concat('<select id ="dangerDrop" value="this.value">')
+        htmlText = htmlText.concat('<option value="1" >1</option>')
+        htmlText = htmlText.concat('<option value="20">20</option>')
+        htmlText = htmlText.concat('<option value="50">50</option>')
+        htmlText = htmlText.concat('<option value="100">100</option></select>')
+        htmlText = htmlText.concat(' meters from each other.</div>')
+        htmlText = htmlText.concat( '<input type="button" value="Find the dangerous locations in this province" id="dangerPointButton" >');
+        div.innerHTML = htmlText.concat("</div>");
+        div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
+        return div;
     }
-inf.addTo(map)
-
+inf2.addTo(map)
 
 
 
 //output
+var inf;
 function dangerInfo(d){
     var lat;
     var lon;
@@ -84,7 +99,7 @@ function dangerInfo(d){
         var div = L.DomUtil.create('div', 'title')
         var htmlText = '<div id="dangerInfoWrapper"> ';
         htmlText = htmlText.concat('<div id = dangerInfoHeader> Most Dangerous locations in '+ currentProvince + ' ordered by #accidents:</div>')
-        htmlText = htmlText.concat('<table><thead><tr><th style="align:left;border-right:1px solid black;border-bottom:1px solid black">#accidents</th><th style="align:center;border-bottom:1px solid black">address</th></tr> </thead> <tbody>')
+        htmlText = htmlText.concat('<table><thead><tr><th style="align:center;border-right:1px solid black;border-bottom:1px solid black">#accidents</th><th style="align:center;border-bottom:1px solid black">address</th></tr> </thead> <tbody>')
             for (var i = 0; i < d.dangerousPoints.length ; i++){
 
                 lat = d.dangerousPoints[i].bounds[0][0] ;
@@ -101,12 +116,25 @@ function dangerInfo(d){
                       }
                     });
 
-                htmlText = htmlText.concat( '<tr class="aRow" onclick="map.fitBounds( [[' +  d.dangerousPoints[i].bounds[0] + '],[' +d.dangerousPoints[i].bounds[1] + ']])" ><td style="align:center;border-right:1px solid black" >' + d.dangerousPoints[i].Number_of_accidents + ' </td><td align="center">' + street +' </td></tr>')
+                htmlText = htmlText.concat( '<tr class="aRow" onclick="map.fitBounds( [[' +  d.dangerousPoints[i].bounds[0] + '],[' +d.dangerousPoints[i].bounds[1] + ']])" ><td style="text-align:center;border-right:1px solid black">' + d.dangerousPoints[i].Number_of_accidents + ' </td><td align="center">' + street +' </td></tr>')
             }
-
         htmlText = htmlText.concat('</tbody></table><\div>')
 
+        //add the butons to search again
+//        htmlText = htmlText.concat('<div id="dangerButton"> ');
+//        htmlText = htmlText.concat( '<div id="DangerQuestion">')
+//        htmlText = htmlText.concat('Cluster accidents ')
+//        htmlText = htmlText.concat('<select id ="dangerDrop" value="this.value">')
+//        htmlText = htmlText.concat('<option value="1" >1</option>')
+//        htmlText = htmlText.concat('<option value="20">20</option>')
+//        htmlText = htmlText.concat('<option value="50">50</option>')
+//        htmlText = htmlText.concat('<option value="100">100</option></select>')
+//        htmlText = htmlText.concat(' meters from each other.</div>')
+//        htmlText = htmlText.concat( '<input type="button" value="Recalculate the dangerous locations in this province" id="dangerPointButton" >');
+//        htmlText = htmlText.concat("</div>");
+
         div.innerHTML = htmlText;
+        div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
         return div;
     };
     inf.addTo(map);
@@ -137,6 +165,7 @@ var dangerCallback = function (d) {
 //  map.fitBounds(  d.dangerousPoints[0].bounds )
     var bounds;
     var circle;
+    var numbers;
     for (var i = 0; i < d.dangerousPoints.length ; i++){
 
         if(d.dangerousPoints[i].bounds[0][0] == d.dangerousPoints[i].bounds[1][0] && d.dangerousPoints[i].bounds[0][1] == d.dangerousPoints[i].bounds[1][1]  ){
@@ -144,10 +173,17 @@ var dangerCallback = function (d) {
             //rect = L.rectangle(circle.getBounds(), {fillcolor: 'blue', weight: 1})
         }else{
             bounds = L.latLngBounds(d.dangerousPoints[i].bounds[0], d.dangerousPoints[i].bounds[1])
-            rect = L.rectangle(bounds.pad(0.3), {fillcolor: 'blue', weight: 1})
+            rect = L.rectangle(bounds.pad(0.3), {fillcolor: 'blue', weight: 1});
         }
+
+
+        rect.bindPopup('<p>#Accidents: ' + d.dangerousPoints[i].Number_of_accidents + ' </p>');
+        rect.on('mouseover', function (e) {this.openPopup();});
+        rect.on('mouseout', function (e) {this.closePopup();});
         points.push( rect)
-    }
+        }
+
+
 
     dangerLayer = L.layerGroup(points).addTo(map)
     map.addLayer(dangerLayer)
@@ -157,9 +193,9 @@ var dangerCallback = function (d) {
     //    var rect = L.rectangle(bounds, {color: 'blue', weight: 1}).on('click', function (e)
 }
 
-function updateDangerPoints(){
+function updateDangerPoints(dist){
     console.log("button is clicked");
-    d3.json("/dangerousPoints/"  + String(year) , dangerCallback)
+    d3.json("/dangerousPoints/" + dist + '/'  + String(year) , dangerCallback)
 
 }
 

@@ -96,16 +96,17 @@ def dataCoordinates(year= 2015 ):
 
 
 @app.route("/dangerousPoints")
-@app.route("/dangerousPoints/<int:year>")
-def dangerousPoints(year=2015):
+@app.route("/dangerousPoints/<int:distance>")
+@app.route("/dangerousPoints/<int:distance>/<int:year>")
+def dangerousPoints(distance=1, year=2015):
     data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
-    return flask.jsonify( {"dangerousPoints" : dangerPoints(data_filtered)})
+    return flask.jsonify( {"dangerousPoints" : dangerPoints(data_filtered, distance)})
 
-
-def dangerPoints(df, number_of_accidents=10, d=1):
+def dangerPoints(df, d=1):
     x = df[["VKL_NUMMER", "X_COORD", "Y_COORD", "lat", "lon"]].sort(["X_COORD", "Y_COORD"],
                                                                     ascending=[1, 1]).reset_index(drop=True)
     #print(x.head(1000))
+    print(d)
     def getDangerBounds(accidentPoints):
         output2 = []
         for x in accidentPoints:
@@ -152,7 +153,7 @@ def dangerPoints(df, number_of_accidents=10, d=1):
 
     output.sort(key=len, reverse=True)
 
-    return getDangerBounds(output[:10])
+    return getDangerBounds(output[:25])
 
 # old not smart
 # def dangerPoints(df, number_of_accidents=10, d=10):

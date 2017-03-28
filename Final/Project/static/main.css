@@ -46,17 +46,18 @@
     width: 350px;
     font-size : 18px;
     color: #333333;
-    align: center;
 }
 table, th, td {
     width=350px;
+    align: center;
     border-collapse: collapse;
+
 }
 
 #dangerInfoWrapper{
-    width: relative;
+    width: 350px;
     hight: relative;
-    padding: 10;
+    padding: 10px;
     background-color: #f2f2f2;
     margin-right: -40;
     margin-top: -120;
@@ -67,4 +68,29 @@ table, th, td {
 .aRow:hover{
  background-color: #bfbfbf ;
 
+
+}
+
+#dangerButton{
+    width:350px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    opacity: 0.9;
+
+}
+#dangerQuestion{
+    color: #333333;
+    width: 300px;
+
+}
+#dangerPointButton{
+    align: left;
+}
+#dangerButton2{
+    background-color: gray;
+    width: 300px;
+}
+#dangerButton2:hover{
+    background-color: white;
+    width: 300px;
 }
