@@ -29,11 +29,7 @@ var year = "2013";
 
 var provinceData;
 
-d3.select("#slider").on("input", function() {
-//    year =  String(+this.value);
-    year = this.value;
-    updatePointData();
-});
+
 
 
 // Show the information about a particular pointMap.
@@ -48,7 +44,7 @@ var callback = function (d) {
 
 // Load the data.
 function updatePointData() {
-    d3.select("#selectedYear").text( year );
+    d3.select("#selectedYear").text( "Year: " + year );
     d3.json("/dataCoordinates/" + String(year), callback)
     d3.select("#title").text( "Traffic accidents in Noord-Holland" );
     //function that updates map
@@ -199,6 +195,36 @@ function updateDangerPoints(dist){
 
 }
 
+//FILTERS
+//standard button for dangerous accidents
+var filterHeader = '<p id="filterHeader">Filters </p>'
+var sliderJaar = '<div id="selectedYear"></div><input type="range" value=2009 min=2003 max=2015 id="slider" >';
+var sliderTijd;
+var dropdownWeer;
+var dropDownWeg;
+
+var filters = L.control({position:"bottomleft"})
+    filters.onAdd= function(map){
+        var div = L.DomUtil.create('div', 'title')
+        var htmlText = '<div id="filters"> ';
+        htmlText = htmlText.concat( filterHeader )
+
+        htmlText = htmlText.concat( sliderJaar )
+
+        div.innerHTML = htmlText.concat("</div>");
+        div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
+        console.log(div.innerHTML)
+        return div;
+    }
+
+filters.addTo(map)
+
+d3.select("#slider").on("input", function() {
+//    year =  String(+this.value);
+    year = this.value;
+    updatePointData();
+    console.log("you used the slider")
+});
 
 updatePointData(2015);
 
