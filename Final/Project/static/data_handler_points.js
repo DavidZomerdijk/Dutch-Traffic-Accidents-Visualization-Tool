@@ -39,25 +39,32 @@ var show_info = function (d) {
 };
 
 var callback = function (d) {
-//d3.select("#info").text( JSON.stringify(d, null, 2) );
+    d3.select("#info").text( JSON.stringify(d, null, 2) );
     show_points(d)
+
 }
 
 // Load the data.
 function updatePointData() {
     d3.select("#selectedYear").text( year );
     d3.json("/dataCoordinates/" + String(year), callback)
+    d3.select("#title").text( "Traffic accidents in Noord-Holland" );
     //function that updates map
 };
 //---------------------------------------
 // display data on dangerpoints
 //---------------------------------------
-info.update = function() {
-    this._div.innerHTML = ('points');
-};
+// DangerousPoints
+function dangerInfo(d){
+    var inf = L.control({position: "topright"});
 
-info.update()
-
+    inf.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'title')
+        div.innerHTML = '<h1 id="pointTitle"> Traffic accidents in ' + d.province + '</h1>'
+        return div;
+    };
+    inf.addTo(map);
+}
 
 //---------------------------------------
 // create dangerPoints
@@ -66,6 +73,9 @@ info.update()
 var dangerLayer = null
 
 var dangerCallback = function (d) {
+    //a function that maps the points in text
+    dangerInfo(d);
+
     var rect;
     d3.select("#dangerPoints").text( JSON.stringify(d, null, 2) );
 
@@ -90,6 +100,8 @@ var dangerCallback = function (d) {
 
     dangerLayer = L.layerGroup(points).addTo(map)
     map.addLayer(dangerLayer)
+
+
     //    var bounds = [[53.912257, 27.581640], [53.902257, 27.561640]];
     //    var rect = L.rectangle(bounds, {color: 'blue', weight: 1}).on('click', function (e)
 }
@@ -100,9 +112,12 @@ function updateDangerPoints(){
 
 }
 
-
-
 updatePointData(2015);
+
+
+
+
+
 
 
 

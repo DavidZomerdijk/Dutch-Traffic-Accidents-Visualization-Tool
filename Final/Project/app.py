@@ -68,7 +68,7 @@ def pointMap(province="Noord-Holland"):
 
 @app.route("/province")
 def province( ):
-    return currentProvince
+    return flask.jsonify({"province" : currentProvince})
 
 @app.route("/postProvinceBounds", methods=['POST'] )
 def postProvinceBounds():

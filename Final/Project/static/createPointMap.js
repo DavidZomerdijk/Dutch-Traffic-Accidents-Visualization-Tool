@@ -1,4 +1,5 @@
 
+
 //sets the view
 var map = L.map('pointMap').setView([52.228172, 5.521980], 7);
 var pointLayer = null
@@ -42,10 +43,26 @@ function show_points(d){
     map.addLayer(pointLayer)
 }
 
+// --------------
+// from here there are functions to display static text
+// --------------
 
 
-//createRandomPoints(1,50,51,4,5,5,"red");
-//createPoint(, 597775, 5, 'red' )
+function addTitle(d){
+    var title = L.control({position: "topleft"});
+
+    title.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'title')
+        div.innerHTML = '<h1 id="pointTitle"> Traffic accidents in ' + d.province + '</h1>'
+        return div;
+    };
+    title.addTo(map);
+}
+
+d3.json("/province", addTitle)
+
+
+
 
 
 
