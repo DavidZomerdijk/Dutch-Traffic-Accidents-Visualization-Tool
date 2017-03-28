@@ -18,20 +18,36 @@
     .legend { text-align: left; line-height: 18px; color: #555; }
     .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
 
-
+#titleDiv{
+       margin-top: -80px;
+       margin-left: 50px;
+}
 #pointTitle{
-           margin-top: -60px;
-           margin-left: 50px;
-           color: #333333;
-           font-size: 32px;
+       color: #333333;
+       font-size: 32px;
+}
+#pointTitle:hover{
+    font-weight:bold;
+    color: white;
+}
+
+#homeButton{
+       color: #333333;
+       font-size: 18px;
+       margin-top: -30px;
+
+}
+#homeButton:hover{
+    font-weight:bold;
+    color:white;
 }
 
 #dangerInfoHeader{
     width: 350px;
     font-size : 18px;
-    color: #333333
+    color: #333333;
+    align: center;
 }
-
 table, th, td {
     width=350px;
     border-collapse: collapse;

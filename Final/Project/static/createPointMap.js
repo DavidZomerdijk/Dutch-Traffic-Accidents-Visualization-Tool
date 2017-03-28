@@ -35,7 +35,7 @@ function show_points(d){
         lon = d[i]['lon']
 
 
-        points.push( createPoint(lat,lon, 40, 0.5,'red' ))
+        points.push( createPoint(lat,lon, 15, 0.5,'red' ))
 
 
     }
@@ -46,6 +46,9 @@ function show_points(d){
 // --------------
 // from here there are functions to display static text
 // --------------
+function goHome(){
+    window.location.replace('/')
+}
 
 var currentProvince;
 function addTitle(d){
@@ -53,13 +56,17 @@ function addTitle(d){
     currentProvince = d.province;
     title.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'title')
-        div.innerHTML = '<h1 id="pointTitle"> Traffic accidents in ' + currentProvince + '</h1>'
+        text = '<div id="titleDiv" onclick="ZoomToProvince()"><h1 id="pointTitle"> Traffic accidents in ' + currentProvince + '</h1>'
+        text = text.concat('<p id="homeButton" onclick="goHome()"> Go to homepage </p></div>')
+        div.innerHTML = text
         return div;
     };
     title.addTo(map);
 }
 
 d3.json("/province", addTitle)
+
+
 
 
 

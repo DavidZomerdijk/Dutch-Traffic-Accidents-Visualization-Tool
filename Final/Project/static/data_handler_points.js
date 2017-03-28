@@ -18,6 +18,7 @@ $(document).ready(function(){
   });
 
 
+
 // ------------
 // old functions underneath
 // ------------
@@ -56,15 +57,18 @@ function updatePointData() {
 // creates info for dangerouspoints
 var street ;
 
-//var  getLocation = function(d){
-//    street = d.results[0].formatted_address
-//    //console.log("street" + street)
-//    return "whoop"
-//}
+//standard button for dangerous accidents
+var inf = L.control({position:topright})
+    inf.onAdd= function(map){
+        var htmlText = '<div id="dangerButton">'
+
+    }
+inf.addTo(map)
 
 
 
-var inf;
+
+//output
 function dangerInfo(d){
     var lat;
     var lon;
@@ -96,18 +100,19 @@ function dangerInfo(d){
                            street = data.results[0].formatted_address;
                       }
                     });
-                console.log( street )
 
-                htmlText = htmlText.concat( '<tr class="aRow" onclick="map.fitBounds( [[' +  d.dangerousPoints[i].bounds[0] + '],[' +d.dangerousPoints[i].bounds[1] + ']])" ><td style="align:center; border-right:1px solid black" >' + d.dangerousPoints[i].Number_of_accidents + ' </td><td align="center">' + street +' </td></tr>')
+                htmlText = htmlText.concat( '<tr class="aRow" onclick="map.fitBounds( [[' +  d.dangerousPoints[i].bounds[0] + '],[' +d.dangerousPoints[i].bounds[1] + ']])" ><td style="align:center;border-right:1px solid black" >' + d.dangerousPoints[i].Number_of_accidents + ' </td><td align="center">' + street +' </td></tr>')
             }
 
         htmlText = htmlText.concat('</tbody></table><\div>')
-        console.log(htmlText)
+
         div.innerHTML = htmlText;
         return div;
     };
     inf.addTo(map);
 }
+
+
 
 //---------------------------------------
 // create dangerPoints
@@ -130,16 +135,19 @@ var dangerCallback = function (d) {
 
     //zoom to most dangerous spot
 //  map.fitBounds(  d.dangerousPoints[0].bounds )
-
+    var bounds;
+    var circle;
     for (var i = 0; i < d.dangerousPoints.length ; i++){
-        //if(bounds[0][0] == bounds[1][0] && bounds[0][1] == bounds[1][1]){
 
-//        rect = L.rectangle(d.dangerousPoints[i].bounds, {fillcolor: 'blue', weight: 3})
-
-        //}else{
-
-        rect = L.rectangle(d.dangerousPoints[i].bounds, {fillcolor: 'blue', weight: 3})
-        points.push( rect)}
+        if(d.dangerousPoints[i].bounds[0][0] == d.dangerousPoints[i].bounds[1][0] && d.dangerousPoints[i].bounds[0][1] == d.dangerousPoints[i].bounds[1][1]  ){
+            rect =  new L.Circle(d.dangerousPoints[i].bounds[0], 20);
+            //rect = L.rectangle(circle.getBounds(), {fillcolor: 'blue', weight: 1})
+        }else{
+            bounds = L.latLngBounds(d.dangerousPoints[i].bounds[0], d.dangerousPoints[i].bounds[1])
+            rect = L.rectangle(bounds.pad(0.3), {fillcolor: 'blue', weight: 1})
+        }
+        points.push( rect)
+    }
 
     dangerLayer = L.layerGroup(points).addTo(map)
     map.addLayer(dangerLayer)
@@ -154,6 +162,7 @@ function updateDangerPoints(){
     d3.json("/dangerousPoints/"  + String(year) , dangerCallback)
 
 }
+
 
 updatePointData(2015);
 

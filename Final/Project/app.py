@@ -101,9 +101,11 @@ def dangerousPoints(year=2015):
     data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
     return flask.jsonify( {"dangerousPoints" : dangerPoints(data_filtered)})
 
-def dangerPoints(df, number_of_accidents=10, d=10):
+
+def dangerPoints(df, number_of_accidents=10, d=1):
     x = df[["VKL_NUMMER", "X_COORD", "Y_COORD", "lat", "lon"]].sort(["X_COORD", "Y_COORD"],
                                                                     ascending=[1, 1]).reset_index(drop=True)
+    #print(x.head(1000))
     def getDangerBounds(accidentPoints):
         output2 = []
         for x in accidentPoints:
@@ -118,25 +120,82 @@ def dangerPoints(df, number_of_accidents=10, d=10):
 
     output = []
     temp = []
+    apLocs = {}
     for i in range(1, len(x.index)):
-        a = x.loc[i - 1]
-        b = x.loc[i]
+        if i in apLocs:
+            continue
         addedToTemp = False
+        a = x.loc[i - 1]
+        b = x.loc[i ]
+        whileCount = 0
+        while(abs(b["X_COORD"] - a["X_COORD"]  ) < d ):
 
-        if abs(b["X_COORD"] - a["X_COORD"] )< d:
             if abs(b["Y_COORD"] - a["Y_COORD"]) < d:
-                if temp == []:
+                if temp == [] and (i-1)  not in apLocs:
                     temp.append([a["VKL_NUMMER"], a["lat"], a["lon"]])
-                temp.append([b["VKL_NUMMER"], b["lat"], b["lon"]])
-                addedToTemp = True
+                    apLocs[i-1] = True
+                if (i + whileCount) not in apLocs:
+                    temp.append([b["VKL_NUMMER"], b["lat"], b["lon"]])
 
-        if not addedToTemp and temp != []:
+                    apLocs[i + whileCount] = True
+
+
+            whileCount += 1
+            if( i + whileCount == len(x.index)):
+                break
+            b = x.loc[i + whileCount]
+
+        if  temp != []:
             output.append(temp)
             temp = []
+
 
     output.sort(key=len, reverse=True)
 
     return getDangerBounds(output[:10])
+
+# old not smart
+# def dangerPoints(df, number_of_accidents=10, d=10):
+#     x = df[["VKL_NUMMER", "X_COORD", "Y_COORD", "lat", "lon"]].sort(["X_COORD", "Y_COORD"],
+#                                                                     ascending=[1, 1]).reset_index(drop=True)
+#     def getDangerBounds(accidentPoints):
+#         output2 = []
+#         for x in accidentPoints:
+#             tempDict = {}
+#             tempDict["Number_of_accidents"] = len(x)
+#
+#             lats = [p[1] for p in x]
+#             longs = [p[2] for p in x]
+#             tempDict["bounds"] = [[min(lats), min(longs)], [max(lats), max(longs)]]
+#             output2.append(tempDict)
+#         return output2
+#
+#     output = []
+#     temp = []
+#     apLocs = {}
+#     for i in range(1, len(x.index)):
+#         a = x.loc[i - 1]
+#         b = x.loc[i]
+#         addedToTemp = False
+#
+#         if abs(b["X_COORD"] - a["X_COORD"] )< d:
+#             if abs(b["Y_COORD"] - a["Y_COORD"]) < d:
+#                 if temp == [] and (i - 1) not in apLocs:
+#                     temp.append([a["VKL_NUMMER"], a["lat"], a["lon"]])
+#                     addedToTemp = True
+#                     apLocs[i-1] = True
+#                 if (i ) not in apLocs:
+#                     temp.append([b["VKL_NUMMER"], b["lat"], b["lon"]])
+#                     addedToTemp = True
+#                     apLocs[i ] = True
+#
+#         if not addedToTemp and temp != []:
+#             output.append(temp)
+#             temp = []
+#
+#     output.sort(key=len, reverse=True)
+#
+#     return getDangerBounds(output[:10])
 
 if __name__ == "__main__":
     # load accident data

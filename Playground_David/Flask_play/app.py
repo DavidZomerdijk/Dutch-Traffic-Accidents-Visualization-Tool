@@ -37,6 +37,53 @@ def data(year= 2015 ):
     return output
 
 
+def dangerPoints(df, number_of_accidents=10, d=5):
+    x = df[["VKL_NUMMER", "X_COORD", "Y_COORD", "lat", "lon"]].sort(["X_COORD", "Y_COORD"],
+                                                                    ascending=[1, 1]).reset_index(drop=True)
+    #print(x.head(1000))
+    def getDangerBounds(accidentPoints):
+        output2 = []
+        for x in accidentPoints:
+            tempDict = {}
+            tempDict["Number_of_accidents"] = len(x)
+
+            lats = [p[1] for p in x]
+            longs = [p[2] for p in x]
+            tempDict["bounds"] = [[min(lats), min(longs)], [max(lats), max(longs)]]
+            output2.append(tempDict)
+        return output2
+
+    output = []
+    temp = []
+    apLocs = {}
+    for i in range(1, len(x.index)):
+        if i in apLocs:
+            break
+        addedToTemp = False
+        a = x.loc[i - 1]
+        b = x.loc[i ]
+        whileCount = 0
+        while(abs(b["X_COORD"] - a["X_COORD"]  ) < d ):
+            whileCount += 1
+            if abs(b["Y_COORD"] - a["Y_COORD"]) < d:
+                if temp == [] and (i + whileCount) not in apLocs:
+                    temp.append([a["VKL_NUMMER"], a["lat"], a["lon"]])
+                    apLocs[i-1] = True
+                if (i + whileCount) not in apLocs:
+                    temp.append([b["VKL_NUMMER"], b["lat"], b["lon"]])
+                    addedToTemp = True
+                    apLocs[i] = True
+            if(i+whileCount == len(x.index)):
+                break
+            b = x.loc[i + whileCount]
+
+        if not addedToTemp and temp != []:
+            output.append(temp)
+            temp = []
+
+    output.sort(key=len, reverse=True)
+
+    return getDangerBounds(output[:10])
 
 
 if __name__ == "__main__":
