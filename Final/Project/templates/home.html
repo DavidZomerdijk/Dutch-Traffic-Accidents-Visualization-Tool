@@ -65,12 +65,9 @@
 
             <!--slider for years -->
             <input type="range" value=2009 min=2003 max=2015 id="slider" >
-<<<<<<< HEAD
-        </div>
-=======
+
             <input type="range" multiple value="0,23" />
-  </div>
->>>>>>> 42e99ffa44a96f9da40715d7ee0e99fdadfcb209
+        </div>
 
             <!--shows what year is selected -->
         <div id="selectedYear"></div>
@@ -80,16 +77,6 @@
 
             <!--shows a plot, we migth not use this div at all. -->
         <div id="plot"></div>
-
-            <!--import javascript -->
-            <script type="text/javascript" src="{{ url_for('static', filename='leaflet/netherlands.js') }}"></script>
-            <script type="text/javascript" src="{{ url_for('static', filename='showmap.js') }}"></script>
-            <script type="text/javascript" src="{{ url_for('static', filename='data_handler.js') }}"></script>
-
-
-
-
-
 
         <div class="col-md-6 ">
             <div id="container"></div>
@@ -133,12 +120,10 @@
     </div>
 </div>
 
-
-
-<!--<canvas id="myChart"></canvas>-->
-
-<!--<script type="text/javascript" src="../static/js/ShowBarChart.js"/>-->
-
+<!--import javascript -->
+<script type="text/javascript" src="{{ url_for('static', filename='leaflet/netherlands.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='showmap.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='data_handler.js') }}"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
