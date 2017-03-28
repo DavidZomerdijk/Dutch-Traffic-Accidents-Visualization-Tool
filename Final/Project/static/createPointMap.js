@@ -47,13 +47,13 @@ function show_points(d){
 // from here there are functions to display static text
 // --------------
 
-
+var currentProvince;
 function addTitle(d){
     var title = L.control({position: "topleft"});
-
+    currentProvince = d.province;
     title.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'title')
-        div.innerHTML = '<h1 id="pointTitle"> Traffic accidents in ' + d.province + '</h1>'
+        div.innerHTML = '<h1 id="pointTitle"> Traffic accidents in ' + currentProvince + '</h1>'
         return div;
     };
     title.addTo(map);

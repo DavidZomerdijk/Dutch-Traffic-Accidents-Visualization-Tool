@@ -19,8 +19,36 @@
     .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
 
 
-#title{
-            position: absolute;
-            left: 10px;
-            top: 5px;
+#pointTitle{
+           margin-top: -60px;
+           margin-left: 50px;
+           color: #333333;
+           font-size: 32px;
+}
+
+#dangerInfoHeader{
+    width: 350px;
+    font-size : 18px;
+    color: #333333
+}
+
+table, th, td {
+    width=350px;
+    border-collapse: collapse;
+}
+
+#dangerInfoWrapper{
+    width: relative;
+    hight: relative;
+    padding: 10;
+    background-color: #f2f2f2;
+    margin-right: -40;
+    margin-top: -120;
+    opacity: 0.9;
+
+}
+
+.aRow:hover{
+ background-color: #bfbfbf ;
+
 }

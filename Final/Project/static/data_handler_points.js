@@ -39,7 +39,6 @@ var show_info = function (d) {
 };
 
 var callback = function (d) {
-    d3.select("#info").text( JSON.stringify(d, null, 2) );
     show_points(d)
 
 }
@@ -54,13 +53,57 @@ function updatePointData() {
 //---------------------------------------
 // display data on dangerpoints
 //---------------------------------------
-// DangerousPoints
+// creates info for dangerouspoints
+var street ;
+
+//var  getLocation = function(d){
+//    street = d.results[0].formatted_address
+//    //console.log("street" + street)
+//    return "whoop"
+//}
+
+
+
+var inf;
 function dangerInfo(d){
-    var inf = L.control({position: "topright"});
+    var lat;
+    var lon;
+    var my_json;
+
+    if (inf != undefined) {
+        map.removeControl(inf);
+    }
+
+    inf = L.control({position: "topright"});
 
     inf.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'title')
-        div.innerHTML = '<h1 id="pointTitle"> Traffic accidents in ' + d.province + '</h1>'
+        var htmlText = '<div id="dangerInfoWrapper"> ';
+        htmlText = htmlText.concat('<div id = dangerInfoHeader> Most Dangerous locations in '+ currentProvince + ' ordered by #accidents:</div>')
+        htmlText = htmlText.concat('<table><thead><tr><th style="align:left;border-right:1px solid black;border-bottom:1px solid black">#accidents</th><th style="align:center;border-bottom:1px solid black">address</th></tr> </thead> <tbody>')
+            for (var i = 0; i < d.dangerousPoints.length ; i++){
+
+                lat = d.dangerousPoints[i].bounds[0][0] ;
+                lon = d.dangerousPoints[i].bounds[0][1] ;
+                gAPI =  'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lon + '&sensor=true'
+                //$.getJSON(gAPI).done(function(json) { street = json[0].formatted_address;});
+
+                $.ajax({
+                      url: gAPI,
+                      dataType: 'json',
+                      async: false,
+                      success: function(data) {
+                           street = data.results[0].formatted_address;
+                      }
+                    });
+                console.log( street )
+
+                htmlText = htmlText.concat( '<tr class="aRow" onclick="map.fitBounds( [[' +  d.dangerousPoints[i].bounds[0] + '],[' +d.dangerousPoints[i].bounds[1] + ']])" ><td style="align:center; border-right:1px solid black" >' + d.dangerousPoints[i].Number_of_accidents + ' </td><td align="center">' + street +' </td></tr>')
+            }
+
+        htmlText = htmlText.concat('</tbody></table><\div>')
+        console.log(htmlText)
+        div.innerHTML = htmlText;
         return div;
     };
     inf.addTo(map);
@@ -86,7 +129,7 @@ var dangerCallback = function (d) {
     var points = []
 
     //zoom to most dangerous spot
-    map.fitBounds(  d.dangerousPoints[0].bounds )
+//  map.fitBounds(  d.dangerousPoints[0].bounds )
 
     for (var i = 0; i < d.dangerousPoints.length ; i++){
         //if(bounds[0][0] == bounds[1][0] && bounds[0][1] == bounds[1][1]){
