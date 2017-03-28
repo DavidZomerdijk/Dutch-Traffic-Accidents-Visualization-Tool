@@ -41,6 +41,7 @@
 
     <!-- Bar Chart -->
     <script src="../static/js/ShowBarChart.js"></script>
+    <script src="../static/js/localStorage.js"></script>
 
     <style>
         .axisHorizontal path{
@@ -67,10 +68,12 @@
             <input type="range" value=2009 min=2003 max=2015 id="slider" >
 
             <input type="range" multiple value="0,23" />
+
+            <div id="selectedYear"></div>
         </div>
 
             <!--shows what year is selected -->
-        <div id="selectedYear"></div>
+
 
             <!--shows data for the time being-->
             <!-- <div id="info"></div>-->
@@ -117,6 +120,11 @@
             <option value="H">Hard wind</option>
             <option value="O">Unknown</option>
         </select>
+        <div id="history" class="col-md-6 table-bordered">
+            <p><strong>History</strong></p>
+
+        </div>
+        </div>
     </div>
 </div>
 
@@ -134,7 +142,7 @@
 
 
 <script>
-
+updateLocalStorage();
     ////////////
     // Age categories
     var categories = ['0-4', '5-9', '10-14', '15-19',
