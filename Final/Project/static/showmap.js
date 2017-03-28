@@ -102,6 +102,7 @@ function zoomToFeature(e) {
 
     //route to new page that knows the province
     var location = "/pointMap/" + e.target.feature.properties.OMSCHRIJVI
+    updateLocalStorage(e.target.feature.properties.OMSCHRIJVI);
     window.location.replace( location )
 }
 
