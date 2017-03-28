@@ -23,7 +23,7 @@ var callback = function (d) {
     //here we define the data variable
     provinceData = d
     update_map()
-    updateChart
+    updateChart()
 
 }
 

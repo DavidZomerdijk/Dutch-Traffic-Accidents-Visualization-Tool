@@ -53,12 +53,6 @@ function updatePointData() {
 // display data on dangerpoints
 //---------------------------------------
 info.update = function(props, data) {
-    if( props != null){
-        var accidents = data[ props.OMSCHRIJVI ]["accidents"]
-        var accidents_per_capita = data[ props.OMSCHRIJVI ]["per_capita"]
-        accidents_per_capita = String( Math.round(accidents_per_capita * 100 * 100 )/100) + "%"
-    }
-
     this._div.innerHTML = (props ?  '<b>'  + props.OMSCHRIJVI  +
     '<p>#accidents:</p>' +   String(accidents) +    '<p>Accidents per capita:</p>' +  accidents_per_capita
             : 'Hover over a state');

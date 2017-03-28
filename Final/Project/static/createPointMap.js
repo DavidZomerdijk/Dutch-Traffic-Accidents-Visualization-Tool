@@ -1,3 +1,4 @@
+
 //sets the view
 var map = L.map('pointMap').setView([52.228172, 5.521980], 7);
 var pointLayer = null
