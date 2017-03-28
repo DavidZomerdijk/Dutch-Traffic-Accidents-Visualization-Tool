@@ -1,5 +1,5 @@
 
-
+var info = L.control();
 var zoom = function (bounds) {
     map.fitBounds(  bounds.bounds )
 }
@@ -52,11 +52,12 @@ function updatePointData() {
 //---------------------------------------
 // display data on dangerpoints
 //---------------------------------------
-info.update = function(props, data) {
-    this._div.innerHTML = (props ?  '<b>'  + props.OMSCHRIJVI  +
-    '<p>#accidents:</p>' +   String(accidents) +    '<p>Accidents per capita:</p>' +  accidents_per_capita
-            : 'Hover over a state');
+info.update = function() {
+    this._div.innerHTML = ('points');
 };
+
+info.update()
+
 
 //---------------------------------------
 // create dangerPoints

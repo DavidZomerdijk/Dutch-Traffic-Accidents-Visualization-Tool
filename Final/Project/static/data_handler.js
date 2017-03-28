@@ -31,7 +31,6 @@ var callback = function (d) {
 function update(year) {
     d3.select("#selectedYear").text( year );
     d3.json("/data/" + String(year), callback)
-
 };
 
 function updateWeer() {
