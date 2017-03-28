@@ -53,7 +53,7 @@ function updatePointData() {
 // display data on dangerpoints
 //---------------------------------------
 // creates info for dangerouspoints
-var street ;
+var street;
 
 //standard button for dangerous accidents
 var inf2 = L.control({position:"topright"})
