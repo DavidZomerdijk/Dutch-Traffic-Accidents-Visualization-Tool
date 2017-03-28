@@ -176,7 +176,7 @@ var dangerCallback = function (d) {
             rect = L.rectangle(bounds.pad(0.3), {fillcolor: 'blue', weight: 1});
         }
 
-
+//some code to add popup
         rect.bindPopup('<p>#Accidents: ' + d.dangerousPoints[i].Number_of_accidents + ' </p>');
         rect.on('mouseover', function (e) {this.openPopup();});
         rect.on('mouseout', function (e) {this.closePopup();});

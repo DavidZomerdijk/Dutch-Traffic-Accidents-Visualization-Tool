@@ -30,12 +30,20 @@ function show_points(d){
     var points = []
     var lat
     var long;
+    var opacity;
+    var point;
+    var radius = 15;
     for (var i = 0; i < d.length ; i++){
         lat = d[i]['lat']
         lon = d[i]['lon']
+        opacity = d[i]['accidents'] * 0.25
 
+        point = createPoint(lat,lon, radius, opacity,'red' )
+        point.bindPopup('<p>#Accidents: ' + d[i]['accidents'] + ' </p>');
+        point.on('mouseover', function (e) {this.openPopup();});
+        point.on('mouseout', function (e) {this.closePopup();});
 
-        points.push( createPoint(lat,lon, 15, 0.5,'red' ))
+        points.push( point )
 
 
     }

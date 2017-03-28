@@ -92,6 +92,9 @@ def getProvinceBounds():
 def dataCoordinates(year= 2015 ):
     data_filtered = accidentData[ (accidentData["JAAR_VKL"] == year)]
     output = data_filtered[data_filtered["PVE_NAAM"] == currentProvince][['lat', 'lon']]
+    output = output[['lat', 'lon']].groupby(['lat', 'lon']).size().reset_index(name="accidents")
+
+
     return output.to_json(orient="records")
 
 
