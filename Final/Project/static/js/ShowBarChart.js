@@ -59,7 +59,6 @@ function updateBarChart(){
     });
 
     $('#inverted').click(function () {
-        console.log("test");
         chart.update({
             chart: {
                 inverted: true,

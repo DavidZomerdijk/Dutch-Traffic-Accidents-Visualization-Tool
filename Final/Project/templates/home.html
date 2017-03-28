@@ -41,6 +41,7 @@
 
     <!-- Bar Chart -->
     <script src="../static/js/ShowBarChart.js"></script>
+    <script src="../static/js/localStorage.js"></script>
 
     <style>
         .axisHorizontal path{
@@ -65,27 +66,20 @@
 
             <!--slider for years -->
             <input type="range" value=2009 min=2003 max=2015 id="slider" >
+
             <input type="range" multiple value="0,23" />
-  </div>
+
+            <div id="selectedYear"></div>
+        </div>
 
             <!--shows what year is selected -->
-            <div id="selectedYear"></div>
+
 
             <!--shows data for the time being-->
             <!-- <div id="info"></div>-->
 
             <!--shows a plot, we migth not use this div at all. -->
-            <div id="plot"></div>
-
-            <!--import javascript -->
-            <script type="text/javascript" src="{{ url_for('static', filename='leaflet/netherlands.js') }}"></script>
-            <script type="text/javascript" src="{{ url_for('static', filename='showmap.js') }}"></script>
-            <script type="text/javascript" src="{{ url_for('static', filename='data_handler.js') }}"></script>
-
-
-
-        </div>
-
+        <div id="plot"></div>
 
         <div class="col-md-6 ">
             <div id="container"></div>
@@ -93,6 +87,7 @@
             <button id="plain">Plain</button>
             <button id="polar">Polar</button>-->
         </div>
+
 
         <div class="col-md-6"><br></div>
         <div class="col-md-2 table-bordered">
@@ -125,26 +120,29 @@
             <option value="H">Hard wind</option>
             <option value="O">Unknown</option>
         </select>
+        <div id="history" class="col-md-6 table-bordered">
+            <p><strong>History</strong></p>
+
+        </div>
+        </div>
     </div>
-
 </div>
 
-
-<!--<canvas id="myChart"></canvas>-->
-
-<!--<script type="text/javascript" src="../static/js/ShowBarChart.js"/>-->
-</div>
+<!--import javascript -->
+<script type="text/javascript" src="{{ url_for('static', filename='leaflet/netherlands.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='showmap.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='data_handler.js') }}"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-<div id="container2" class="col-md-6 bg-grey" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
-<div id="container3" class="col-md-6 bg-grey" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+<!--<div id="container2" class="col-md-6 bg-grey" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+<div id="container3" class="col-md-6 bg-grey" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>-->
 
 
 <script>
-
+updateLocalStorage();
     ////////////
     // Age categories
     var categories = ['0-4', '5-9', '10-14', '15-19',
@@ -278,6 +276,7 @@
     //slider values
     //   $("#year").slider({});
     //   $("#day").slider({});
+
 
 </script>
 
