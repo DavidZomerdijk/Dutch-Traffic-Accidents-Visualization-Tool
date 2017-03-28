@@ -1,24 +1,13 @@
 var chart;
 function updateBarChart(){
 
-    console.log(sortedAccidentsData.length);
     xAxisCategories = [];
     seriesData = [];
-
-    /*for (var i = 0; i < sortedAccidentsData.length; i++) {
-     alert('hello');
-     //xAxisCategories.push(sortedAccidentsData[i].provinceName);
-     //seriesData.push(sortedAccidentsData[i].values.accidents);
-
-     }*/
 
     sortedAccidentsData.forEach(function(province) {
         xAxisCategories.push(province.provinceName);
         seriesData.push(province.values.accidents);
     });
-
-    console.log(xAxisCategories);
-    console.log(seriesData);
 
      chart = Highcharts.chart('container', {
 
@@ -31,23 +20,31 @@ function updateBarChart(){
         },
 
         xAxis: {
-            categories: xAxisCategories//['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            categories: xAxisCategories
         },
 
         series: [{
-            type: 'column',
-            colorByPoint: true,
-            data: seriesData,//[29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+            type: 'bar',
+            //colorByPoint: true,
+            data: seriesData,
             showInLegend: false
         }],
          chart:{
-             inverted:true
-         }
+             inverted:true,
+             backgroundColor: '#dddddd'
+         },
 
-
+         navigation: {
+            buttonOptions: {
+                enabled: false
+            }
+        }
 
     });
 
+    Highcharts.setOptions({
+        colors: ['#058DC7']
+    });
 
     $('#plain').click(function () {
         chart.update({
