@@ -14,6 +14,8 @@ import pickle
 PATH_TO_DATA = "../../Data/verkeersOngelukkenNederland.p"
 app = flask.Flask(__name__)
 
+max_color_value = 0.0
+min_color_value = 1000.0
 
 #######################################
 # this is for the main map
@@ -44,14 +46,14 @@ def data(year= 2015,minTijd=0, maxTijd=24, weer='all'  ):
     #here we add the population data
     outputDict = {}
     for key, value in json.loads(output).items():
-        outputDict[key] = {"accidents": value, "per_capita": round((int(value) / populationData[key] ), 5)}
+        outputDict[key] = {"accidents": value, "per_capita": round((int(value)*100 / populationData[key] ), 3)}
         provinces.remove(key)
         #   weather = result[(result["PVE_NAAM"] == key)]["WGD_CODE_1"]
-        # "weather":weather.value_counts().to_json(orient="columns"),
-        if max_color_value < round((int(value) / populationData[key]), 5):
-            max_color_value = round((int(value) / populationData[key]), 5)
-        if min_color_value > round((int(value) / populationData[key]), 5):
-            min_color_value = round((int(value) / populationData[key]), 5)
+        #"weather":weather.value_counts().to_json(orient="columns"),
+        if max_color_value < round((int(value)*100 / populationData[key]), 3):
+            max_color_value = round((int(value)*100 / populationData[key]), 3)
+        if min_color_value > round((int(value)*100 / populationData[key]), 3):
+            min_color_value = round((int(value)*100 / populationData[key]), 3)
 
     for prov in provinces:
         outputDict[prov] = {"accidents": 0, "per_capita": 0}

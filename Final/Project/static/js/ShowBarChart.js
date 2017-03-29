@@ -43,7 +43,9 @@ function updateBarChart(showPerProvince){
     }
 
 
-
+    Highcharts.setOptions({
+        colors: ['#079edf']
+    });
      chart = Highcharts.chart('container', {
 
         title: {
@@ -84,9 +86,7 @@ function updateBarChart(showPerProvince){
 
     });
 
-    Highcharts.setOptions({
-        colors: ['#058DC7']
-    });
+
 
     $('#plain').click(function () {
         chart.update({
