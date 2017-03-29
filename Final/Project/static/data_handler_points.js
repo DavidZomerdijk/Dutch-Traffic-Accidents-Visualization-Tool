@@ -24,8 +24,10 @@ $(document).ready(function(){
 // ------------
 // old functions underneath
 // ------------
-
+//GLOBAL VARIABLES
 var year = "2013";
+var minTijd = "0"
+var maxTijd = "24";
 
 var provinceData;
 
@@ -44,8 +46,7 @@ var callback = function (d) {
 
 // Load the data.
 function updatePointData() {
-    d3.select("#selectedYear").text( "Year: " + year );
-    d3.json("/dataCoordinates/" + String(year), callback)
+    d3.json("/dataCoordinates/" + String(year) + "/" + String(minTijd) + "/" +String( maxTijd ), callback)
     d3.select("#title").text( "Traffic accidents in Noord-Holland" );
     //function that updates map
 };
@@ -108,7 +109,10 @@ function dangerInfo(d){
                       dataType: 'json',
                       async: false,
                       success: function(data) {
-                           street = data.results[0].formatted_address;
+                        if( data.results[0] == "undefined"){
+                            street = "unknown"
+                        }else{
+                           street = data.results[0].formatted_address;}
                       }
                     });
 
@@ -189,6 +193,8 @@ var dangerCallback = function (d) {
     //    var rect = L.rectangle(bounds, {color: 'blue', weight: 1}).on('click', function (e)
 }
 
+
+
 function updateDangerPoints(dist){
     console.log("button is clicked");
     d3.json("/dangerousPoints/" + dist + '/'  + String(year) , dangerCallback)
@@ -196,10 +202,15 @@ function updateDangerPoints(dist){
 }
 
 //FILTERS
+
+
+
 //standard button for dangerous accidents
 var filterHeader = '<p id="filterHeader">Filters </p>'
-var sliderJaar = '<div id="selectedYear"></div><input type="range" value=2009 min=2003 max=2015 id="slider" >';
-var sliderTijd;
+var sliderJaar ='<div id="sliderJaar"></div>'  //'<div id="selectedYear"></div> <input type="range" value=2009 min=2003 max=2015 id="sliderYear" >';
+var sliderJaarHeader = '<p><label for="jaar">Year: </label><input style="width:50px!important" type="text" id="yearValue" readonly style="border"</p>'
+var sliderTijdHeader = '<p><label for="hours">Time range: </label><input  style="width:50px!important" type="text" id="amount" readonly style="border"</p>'
+var sliderTijd = '<div id="slider-range"></div>';
 var dropdownWeer;
 var dropDownWeg;
 
@@ -208,8 +219,10 @@ var filters = L.control({position:"bottomleft"})
         var div = L.DomUtil.create('div', 'title')
         var htmlText = '<div id="filters"> ';
         htmlText = htmlText.concat( filterHeader )
-
+        htmlText = htmlText.concat(sliderJaarHeader)
         htmlText = htmlText.concat( sliderJaar )
+        htmlText = htmlText.concat(sliderTijdHeader)
+        htmlText = htmlText.concat( sliderTijd )
 
         div.innerHTML = htmlText.concat("</div>");
         div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
@@ -219,12 +232,51 @@ var filters = L.control({position:"bottomleft"})
 
 filters.addTo(map)
 
-d3.select("#slider").on("input", function() {
-//    year =  String(+this.value);
-    year = this.value;
-    updatePointData();
-    console.log("you used the slider")
+//d3.select("#slider").on("input", function() {
+////    year =  String(+this.value);
+//    year = this.value;
+//    updatePointData();
+//    console.log("you used the slider")
+//});
+
+
+$( "#sliderJaar" ).slider({
+    min:2009,
+    max:2015,
+    value: 2013,
+    slide: function( event, ui ) {
+        year = ui.value;
+        updatePointData();
+        $( "#yearValue" ).val(  + ui.value);
+    }
 });
+    $( "#yearValue" ).val(  $( "#sliderJaar" ).slider( "value") )
+
+
+
+
+
+$( function() {
+$( "#slider-range" ).slider({
+  range: true,
+  min: 0,
+  max: 24,
+  values: [ 0, 24 ],
+  slide: function( event, ui ) {
+        minTijd = ui.values[0];
+        maxTijd = ui.values[1];
+        updatePointData();
+    $( "#amount" ).val(  + ui.values[ 0 ] + "h -" + ui.values[ 1 ] +"h" );
+  }
+});
+$( "#amount" ).val(  $( "#slider-range" ).slider( "values", 0 ) +
+  "h - " + $( "#slider-range" ).slider( "values", 1 ) + "h");
+} );
+
+
+
+
+
 
 updatePointData(2015);
 

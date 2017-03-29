@@ -7,10 +7,15 @@
 
     <script src="http://d3js.org/d3.v2.js"></script>
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 
     <!--import css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!--<link rel="stylesheet" href="/resources/demos/style.css">-->
     <!--import javascript -->
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
@@ -18,21 +23,6 @@
 <body>
 
     <div id='pointMap'></div>
-    <!--<h1 id="title">Traffic accidents in Noord-Holland </h1>-->
-
-    <!--&lt;!&ndash;slider for years &ndash;&gt;-->
-    <!--<input type="range" value=2009 min=2003 max=2015 id="slider" >-->
-
-    <!--&lt;!&ndash;shows what year is selected &ndash;&gt;-->
-    <!--<div id="selectedYear"></div>-->
-
-    <!--&lt;!&ndash;shows data for the time being&ndash;&gt;-->
-    <!--<div id="info"></div>-->
-
-
-
-    <!--shows a plot, we migth not use this div at all. -->
-    <div id="dangerPoints"></div>
 
     <!--import javascript -->
     <script type="text/javascript" src="{{ url_for('static', filename='createPointMap.js') }}"></script>

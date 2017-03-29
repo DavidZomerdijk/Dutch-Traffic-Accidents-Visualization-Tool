@@ -93,10 +93,21 @@ def getProvinceBounds():
 
 
 @app.route("/dataCoordinates")
-@app.route("/dataCoordinates/<int:year>")
-def dataCoordinates(year= 2015 ):
+@app.route("/dataCoordinates/<int:year>/<int:minTijd>/<int:maxTijd>")
+def dataCoordinates(year= 2015,minTijd=0, maxTijd=24 ):
+    #filter on year
     data_filtered = accidentData[ (accidentData["JAAR_VKL"] == year)]
-    output = data_filtered[data_filtered["PVE_NAAM"] == currentProvince][['lat', 'lon']]
+
+    #filter on province
+    output = data_filtered[data_filtered["PVE_NAAM"] == currentProvince]
+
+    #filter on time
+    output = output[ (output["UUR"] >= minTijd) & (output["UUR"] <= maxTijd) ]
+
+    #only take lat lon
+    output = output[['lat', 'lon']]
+
+    #group and sum
     output = output[['lat', 'lon']].groupby(['lat', 'lon']).size().reset_index(name="accidents")
 
 
