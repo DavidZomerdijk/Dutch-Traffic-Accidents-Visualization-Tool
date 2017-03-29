@@ -5,7 +5,6 @@ var zoom = function (bounds) {
 }
 
 function ZoomToProvince(){
-
     d3.json("/getProvinceBounds", zoom)
 }
 
@@ -20,7 +19,6 @@ $(document).ready(function(){
   });
 
 
-
 // ------------
 // old functions underneath
 // ------------
@@ -28,10 +26,8 @@ $(document).ready(function(){
 var year = "2013";
 var minTijd = "0"
 var maxTijd = "24";
-
+var weer = "all"
 var provinceData;
-
-
 
 
 // Show the information about a particular pointMap.
@@ -46,10 +42,11 @@ var callback = function (d) {
 
 // Load the data.
 function updatePointData() {
-    d3.json("/dataCoordinates/" + String(year) + "/" + String(minTijd) + "/" +String( maxTijd ), callback)
+    d3.json( "/dataCoordinates/" + String(year) + "/" + String(minTijd) + "/" +String( maxTijd ) +"/" +String(weer), callback)
     d3.select("#title").text( "Traffic accidents in Noord-Holland" );
     //function that updates map
 };
+
 //---------------------------------------
 // display data on dangerpoints
 //---------------------------------------
@@ -76,8 +73,6 @@ var inf2 = L.control({position:"topright"})
         return div;
     }
 inf2.addTo(map)
-
-
 
 //output
 var inf;
@@ -109,7 +104,7 @@ function dangerInfo(d){
                       dataType: 'json',
                       async: false,
                       success: function(data) {
-                        if( data.results[0] == "undefined"){
+                        if( typeof(data.results[0]) == "undefined"){
                             street = "unknown"
                         }else{
                            street = data.results[0].formatted_address;}
@@ -120,18 +115,6 @@ function dangerInfo(d){
             }
         htmlText = htmlText.concat('</tbody></table><\div>')
 
-        //add the butons to search again
-//        htmlText = htmlText.concat('<div id="dangerButton"> ');
-//        htmlText = htmlText.concat( '<div id="DangerQuestion">')
-//        htmlText = htmlText.concat('Cluster accidents ')
-//        htmlText = htmlText.concat('<select id ="dangerDrop" value="this.value">')
-//        htmlText = htmlText.concat('<option value="1" >1</option>')
-//        htmlText = htmlText.concat('<option value="20">20</option>')
-//        htmlText = htmlText.concat('<option value="50">50</option>')
-//        htmlText = htmlText.concat('<option value="100">100</option></select>')
-//        htmlText = htmlText.concat(' meters from each other.</div>')
-//        htmlText = htmlText.concat( '<input type="button" value="Recalculate the dangerous locations in this province" id="dangerPointButton" >');
-//        htmlText = htmlText.concat("</div>");
 
         div.innerHTML = htmlText;
         div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
@@ -139,8 +122,6 @@ function dangerInfo(d){
     };
     inf.addTo(map);
 }
-
-
 
 //---------------------------------------
 // create dangerPoints
@@ -183,36 +164,40 @@ var dangerCallback = function (d) {
         points.push( rect)
         }
 
-
-
     dangerLayer = L.layerGroup(points).addTo(map)
     map.addLayer(dangerLayer)
 
-
-    //    var bounds = [[53.912257, 27.581640], [53.902257, 27.561640]];
-    //    var rect = L.rectangle(bounds, {color: 'blue', weight: 1}).on('click', function (e)
 }
-
-
 
 function updateDangerPoints(dist){
     console.log("button is clicked");
-    d3.json("/dangerousPoints/" + dist + '/'  + String(year) , dangerCallback)
+    d3.json("/dangerousPoints/" + String(dist) , dangerCallback)
 
 }
 
+function changeWeer(d){
+    console.log(d)
+    weer = d;
+    updatePointData()
+}
+
 //FILTERS
-
-
-
 //standard button for dangerous accidents
 var filterHeader = '<p id="filterHeader">Filters </p>'
 var sliderJaar ='<div id="sliderJaar"></div>'  //'<div id="selectedYear"></div> <input type="range" value=2009 min=2003 max=2015 id="sliderYear" >';
 var sliderJaarHeader = '<p><label for="jaar">Year: </label><input style="width:50px!important" type="text" id="yearValue" readonly style="border"</p>'
 var sliderTijdHeader = '<p><label for="hours">Time range: </label><input  style="width:50px!important" type="text" id="amount" readonly style="border"</p>'
 var sliderTijd = '<div id="slider-range"></div>';
-var dropdownWeer;
+var dropdownWeer ='<select id ="dropDownWeer" value="this.value" onchange="changeWeer(this.value)">'
+dropdownWeer = dropdownWeer.concat('<option value="all" >all</option>')
+dropdownWeer = dropdownWeer.concat('<option value="D">Dry</option>')
+dropdownWeer = dropdownWeer.concat('<option value="R">Rain</option>')
+dropdownWeer = dropdownWeer.concat('<option value="M">Mist</option>')
+dropdownWeer = dropdownWeer.concat('<option value="S">Snow/Hail</option>')
+dropdownWeer = dropdownWeer.concat('<option value="H">Hard wind</option>')
+dropdownWeer = dropdownWeer.concat('<option value="O">unknown</option></select>')
 var dropDownWeg;
+
 
 var filters = L.control({position:"bottomleft"})
     filters.onAdd= function(map){
@@ -223,7 +208,8 @@ var filters = L.control({position:"bottomleft"})
         htmlText = htmlText.concat( sliderJaar )
         htmlText = htmlText.concat(sliderTijdHeader)
         htmlText = htmlText.concat( sliderTijd )
-
+        htmlText=  htmlText.concat('<br><div dropDownWeerHeader>Weather condition: </div>')
+        htmlText = htmlText.concat( dropdownWeer )
         div.innerHTML = htmlText.concat("</div>");
         div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
         console.log(div.innerHTML)
@@ -231,13 +217,6 @@ var filters = L.control({position:"bottomleft"})
     }
 
 filters.addTo(map)
-
-//d3.select("#slider").on("input", function() {
-////    year =  String(+this.value);
-//    year = this.value;
-//    updatePointData();
-//    console.log("you used the slider")
-//});
 
 
 $( "#sliderJaar" ).slider({
@@ -251,9 +230,6 @@ $( "#sliderJaar" ).slider({
     }
 });
     $( "#yearValue" ).val(  $( "#sliderJaar" ).slider( "value") )
-
-
-
 
 
 $( function() {
@@ -272,9 +248,6 @@ $( "#slider-range" ).slider({
 $( "#amount" ).val(  $( "#slider-range" ).slider( "values", 0 ) +
   "h - " + $( "#slider-range" ).slider( "values", 1 ) + "h");
 } );
-
-
-
 
 
 

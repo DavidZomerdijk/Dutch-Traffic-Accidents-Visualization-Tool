@@ -39,7 +39,7 @@ def data(year= 2015 , weer = "all" ):
     #here we add the population data
     outputDict = {}
     for key, value in json.loads(output).items():
-        outputDict[key] = {"accidents": value, "per_capita": round((int(value) / populationData[key] ), 5)}
+        outputDict[key] = {"accidents": value, "per_capita": round((int(value) / populationData[key] ), 5) }
         #   weather = result[(result["PVE_NAAM"] == key)]["WGD_CODE_1"]
         #"weather":weather.value_counts().to_json(orient="columns"),
     return json.dumps(outputDict)
@@ -88,19 +88,23 @@ def getProvinceBounds():
 
 
 @app.route("/dataCoordinates")
-@app.route("/dataCoordinates/<int:year>/<int:minTijd>/<int:maxTijd>")
-def dataCoordinates(year= 2015,minTijd=0, maxTijd=24 ):
+@app.route("/dataCoordinates/<int:year>/<int:minTijd>/<int:maxTijd>/<weer>")
+def dataCoordinates(year= 2015,minTijd=0, maxTijd=24, weer='all' ):
     #filter on year
-    data_filtered = accidentData[ (accidentData["JAAR_VKL"] == year)]
+    global data_filtered
+    if weer == "all":
+        data_filtered = accidentData[(accidentData["JAAR_VKL"] == year)]
+    else:
+        data_filtered = accidentData[(accidentData["JAAR_VKL"] == year)][accidentData["WGD_CODE_1"] == str(weer)]
 
     #filter on province
-    output = data_filtered[data_filtered["PVE_NAAM"] == currentProvince]
+    data_filtered = data_filtered[data_filtered["PVE_NAAM"] == currentProvince]
 
     #filter on time
-    output = output[ (output["UUR"] >= minTijd) & (output["UUR"] <= maxTijd) ]
+    data_filtered = data_filtered[ (data_filtered["UUR"] >= minTijd) & (data_filtered["UUR"] <= maxTijd) ]
 
     #only take lat lon
-    output = output[['lat', 'lon']]
+    output = data_filtered[['lat', 'lon']]
 
     #group and sum
     output = output[['lat', 'lon']].groupby(['lat', 'lon']).size().reset_index(name="accidents")
@@ -111,9 +115,10 @@ def dataCoordinates(year= 2015,minTijd=0, maxTijd=24 ):
 
 @app.route("/dangerousPoints")
 @app.route("/dangerousPoints/<int:distance>")
-@app.route("/dangerousPoints/<int:distance>/<int:year>")
-def dangerousPoints(distance=1, year=2015):
-    data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
+def dangerousPoints(distance=1):
+    print(data_filtered.head(50))
+    #data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
+
     return flask.jsonify( {"dangerousPoints" : dangerPoints(data_filtered, distance)})
 
 def dangerPoints(df, d=1):
