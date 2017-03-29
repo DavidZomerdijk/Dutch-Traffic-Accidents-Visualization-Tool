@@ -24,6 +24,13 @@ function update() {
 
 update()
 
+function changeWeer(d){
+    console.log(d)
+    weer = d;
+    update()
+}
+
+
 //FILTERS
 //standard button for dangerous accidents
 var filterHeader = '<p id="filterHeader">Filters </p>'
@@ -61,14 +68,13 @@ var filters = L.control({position:"bottomleft"})
 
 filters.addTo(map)
 
-
 $( "#sliderJaar" ).slider({
     min:2009,
     max:2015,
     value: 2013,
     slide: function( event, ui ) {
         year = ui.value;
-        updatePointData();
+        update();
         $( "#yearValue" ).val(  + ui.value);
     }
 });
@@ -84,7 +90,7 @@ $( "#slider-range" ).slider({
   slide: function( event, ui ) {
         minTijd = ui.values[0];
         maxTijd = ui.values[1];
-        updatePointData();
+        update();
     $( "#amount" ).val(  + ui.values[ 0 ] + "h -" + ui.values[ 1 ] +"h" );
   }
 });

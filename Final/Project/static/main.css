@@ -95,14 +95,13 @@ table, th, td {
     width: 300px;
 }
 
-
 #filters{
     width: 200px;
     hight: relative;
     background-color: #f2f2f2;
     padding:5px;
     padding-top:0px!important;
-    /*margin-bottom: 500px;*/
+    /*margin-bottom: 500px*/
 }
 
 #filterHeader{
