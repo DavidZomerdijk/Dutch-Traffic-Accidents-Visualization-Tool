@@ -25,9 +25,6 @@ def index():
     """
     return flask.render_template("home.html")
 
-max_color_value = 0.0
-min_color_value = 1000.0
-
 @app.route("/data")
 @app.route("/data/<int:year>")
 @app.route("/data/<int:year>/<weer>")
@@ -59,12 +56,6 @@ def data(year= 2015 , weer = "all" ):
     for prov in provinces:
         outputDict[prov] = {"accidents": 0, "per_capita": 0}
     return json.dumps(outputDict)
-
-@app.route("/maxvalue")
-def maxvalue():
-    global max_color_value
-    global min_color_value
-    return flask.jsonify({"max_value"  : str(max_color_value), "min_value" : str(min_color_value)})
 
 #######################################
 # this is for the pointMap
