@@ -1,14 +1,28 @@
 var year = "2013";
-var minTijd = "0"
-var maxTijd = "24";
+var minTijd = 0
+var maxTijd = 24;
 var weer = "all"
 
 //d3.select("#slider").on("input", function() {
 //    year = String(+this.value);
 //    update();
 //});
+function updateMaxValue(){
+    $.ajax({
+      url: "/maxvalue",
+      dataType: 'json',
+      async: false,
+      success: function(data) {
+
+           maxcolorvalue = data.max_value;
+           mincolorvalue = data.min_value;
+           diffvalue = (maxcolorvalue - mincolorvalue)/8}
+
+    });
+}
 
 var callback = function (d) {
+    updateMaxValue()
     provinceData = d
     update_map()
     updateChart()
