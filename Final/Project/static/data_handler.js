@@ -40,10 +40,10 @@ function changeWeer(d){
 
 //FILTERS
 //standard button for dangerous accidents
-var filterHeader = '<p id="filterHeader">Filters </p>'
+var filterHeader = '<p id="filterHeader" style="align:left!important">Filters </p>'
 var sliderJaar ='<div id="sliderJaar"></div>'  //'<div id="selectedYear"></div> <input type="range" value=2009 min=2003 max=2015 id="sliderYear" >';
-var sliderJaarHeader = '<p><label for="jaar">Year: </label><input style="width:50px!important" type="text" id="yearValue" readonly style="border"</p>'
-var sliderTijdHeader = '<p><label for="hours">Time range: </label><input  style="width:50px!important" type="text" id="amount" readonly style="border"</p>'
+var sliderJaarHeader = '<div id="year_div">Year: <input style="width:50px!important" type="text" id="yearValue" readonly style="border"</div>'
+var sliderTijdHeader = '<div id="time_div">Time range: <input   id="amount" readonly style="border"</div>'
 var sliderTijd = '<div id="slider-range"></div>';
 var dropdownWeer ='<select id ="dropDownWeer" value="this.value" onchange="changeWeer(this.value)">'
 dropdownWeer = dropdownWeer.concat('<option value="all" >all</option>')

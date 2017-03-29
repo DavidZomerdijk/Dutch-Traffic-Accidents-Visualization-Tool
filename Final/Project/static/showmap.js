@@ -21,8 +21,8 @@ info.update = function(props, data) {
         accidents_per_capita = String( Math.round(accidents_per_capita * 100 )/100) + "%"
     }
 
-    this._div.innerHTML = (props ?  '<b>'  + props.OMSCHRIJVI  +
-    '<p>#accidents:</p>' +   String(accidents) +    '<p>Accidents per capita:</p>' +  accidents_per_capita
+    this._div.innerHTML = (props ?  '<p style="font-size:150%!important;color:#1A1E1F">'+ props.OMSCHRIJVI  + '</p>' +
+    '<p color="black">#accidents:</p>' +  '<p style="color:#1A1E1F">' +  String(accidents) + '</p>' +  '<p color="black">Accidents per capita:</p>' + '<p style="color:#1A1E1F">' + accidents_per_capita + '</p>'
             : 'Hover over a state');
 };
 
