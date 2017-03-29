@@ -1,57 +1,96 @@
-var weathercondition = "all";
-var selected_year = 2009;
+var year = "2013";
+var minTijd = "0"
+var maxTijd = "24";
+var weer = "all"
 
-d3.select("#slider").on("input", function() {
-    selected_year = String(+this.value);
-    update( String(+this.value));
-    updateweer(weathercondition);
-});
-
-function weather(value)
-{
-    weathercondition = value;
-    updateWeer();
-};
-
-// Show the information about a particular point.
-var show_info = function (d) {
-    d3.select("#info").text( d );
-};
-
-function updateMaxValue(){
-    $.ajax({
-      url: "/maxvalue",
-      dataType: 'json',
-      async: false,
-      success: function(data) {
-
-           maxcolorvalue = data.max_value;
-           mincolorvalue = data.min_value;
-           diffvalue = (maxcolorvalue - mincolorvalue)/8}
-
-    });
-}
+//d3.select("#slider").on("input", function() {
+//    year = String(+this.value);
+//    update();
+//});
 
 var callback = function (d) {
-    //d3.select("#info").text( JSON.stringify(d, null, 2) );
-    //here we define the data variable
-    updateMaxValue()
     provinceData = d
     update_map()
     updateChart()
-
+    console.log("provinceData is defined as:")
+    console.log( provinceData )
 }
 
 // Load the data.
-function update(year) {
-    d3.select("#selectedYear").text( year );
-    d3.json("/data/" + String(year), callback)
+function update() {
+    d3.json("/data/" + String(year) + "/" + String(minTijd) + "/" +String( maxTijd ) +"/" +String(weer), callback)
 };
 
-function updateWeer() {
-    console.log("/data/" + selected_year + "/" + String(weathercondition) )
-    d3.json("/data/" + selected_year + "/" + String(weathercondition), callback);
-        //underneath we update the map using a function from show_map
+
+update()
+
+//FILTERS
+//standard button for dangerous accidents
+var filterHeader = '<p id="filterHeader">Filters </p>'
+var sliderJaar ='<div id="sliderJaar"></div>'  //'<div id="selectedYear"></div> <input type="range" value=2009 min=2003 max=2015 id="sliderYear" >';
+var sliderJaarHeader = '<p><label for="jaar">Year: </label><input style="width:50px!important" type="text" id="yearValue" readonly style="border"</p>'
+var sliderTijdHeader = '<p><label for="hours">Time range: </label><input  style="width:50px!important" type="text" id="amount" readonly style="border"</p>'
+var sliderTijd = '<div id="slider-range"></div>';
+var dropdownWeer ='<select id ="dropDownWeer" value="this.value" onchange="changeWeer(this.value)">'
+dropdownWeer = dropdownWeer.concat('<option value="all" >all</option>')
+dropdownWeer = dropdownWeer.concat('<option value="D">Dry</option>')
+dropdownWeer = dropdownWeer.concat('<option value="R">Rain</option>')
+dropdownWeer = dropdownWeer.concat('<option value="M">Mist</option>')
+dropdownWeer = dropdownWeer.concat('<option value="S">Snow/Hail</option>')
+dropdownWeer = dropdownWeer.concat('<option value="H">Hard wind</option>')
+dropdownWeer = dropdownWeer.concat('<option value="O">unknown</option></select>')
+var dropDownWeg;
+
+
+var filters = L.control({position:"bottomleft"})
+    filters.onAdd= function(map){
+        var div = L.DomUtil.create('div', 'title')
+        var htmlText = '<div id="filters"> ';
+        htmlText = htmlText.concat( filterHeader )
+        htmlText = htmlText.concat(sliderJaarHeader)
+        htmlText = htmlText.concat( sliderJaar )
+        htmlText = htmlText.concat(sliderTijdHeader)
+        htmlText = htmlText.concat( sliderTijd )
+        htmlText=  htmlText.concat('<br><div dropDownWeerHeader>Weather condition: </div>')
+        htmlText = htmlText.concat( dropdownWeer )
+        div.innerHTML = htmlText.concat("</div>");
+        div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
+        console.log(div.innerHTML)
+        return div;
     }
 
-updateWeer();
+filters.addTo(map)
+
+
+$( "#sliderJaar" ).slider({
+    min:2009,
+    max:2015,
+    value: 2013,
+    slide: function( event, ui ) {
+        year = ui.value;
+        updatePointData();
+        $( "#yearValue" ).val(  + ui.value);
+    }
+});
+    $( "#yearValue" ).val(  $( "#sliderJaar" ).slider( "value") )
+
+
+$( function() {
+$( "#slider-range" ).slider({
+  range: true,
+  min: 0,
+  max: 24,
+  values: [ 0, 24 ],
+  slide: function( event, ui ) {
+        minTijd = ui.values[0];
+        maxTijd = ui.values[1];
+        updatePointData();
+    $( "#amount" ).val(  + ui.values[ 0 ] + "h -" + ui.values[ 1 ] +"h" );
+  }
+});
+$( "#amount" ).val(  $( "#slider-range" ).slider( "values", 0 ) +
+  "h - " + $( "#slider-range" ).slider( "values", 1 ) + "h");
+} );
+
+
+

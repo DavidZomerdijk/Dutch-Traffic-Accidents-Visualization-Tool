@@ -18,7 +18,7 @@ info.update = function(props, data) {
     if( props != null){
         var accidents = data[ props.OMSCHRIJVI ]["accidents"]
         var accidents_per_capita = data[ props.OMSCHRIJVI ]["per_capita"]
-        accidents_per_capita = String( Math.round(accidents_per_capita * 100 * 100 )/100) + "%"
+        accidents_per_capita = String( Math.round(accidents_per_capita * 100 )/100) + "%"
     }
 
     this._div.innerHTML = (props ?  '<b>'  + props.OMSCHRIJVI  +
@@ -126,13 +126,14 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-            grades = [0.0, 0.004, 0.005, 0.006, 0.007,0.008, 0.009,0.01],
+            grades = [(maxcolorvalue-(8*diffvalue)).toFixed(2)+"%",(maxcolorvalue-(7*diffvalue)).toFixed(2)+"%",(maxcolorvalue-(6*diffvalue)).toFixed(2)+"%",(maxcolorvalue-(5*diffvalue)).toFixed(2)+"%",(maxcolorvalue-(4*diffvalue)).toFixed(2)+"%",(maxcolorvalue-(3*diffvalue)).toFixed(2)+"%",(maxcolorvalue-(2*diffvalue)).toFixed(2)+"%",(maxcolorvalue-(1*diffvalue)).toFixed(2)+"%"],
             labels = [],
+            legendcolors = [(maxcolorvalue-(8*diffvalue)).toFixed(2),(maxcolorvalue-(7*diffvalue)).toFixed(2),(maxcolorvalue-(6*diffvalue)).toFixed(2),(maxcolorvalue-(5*diffvalue)).toFixed(2),(maxcolorvalue-(4*diffvalue)).toFixed(2),(maxcolorvalue-(3*diffvalue)).toFixed(2),(maxcolorvalue-(2*diffvalue)).toFixed(2),(maxcolorvalue-(1*diffvalue)).toFixed(2)],
             from, to;
 
-    for (var i = 0; i < grades.length; i++) {
-        from = grades[i];
-        to = grades[i + 1];
+    for (var i = 0; i < legendcolors.length; i++) {
+        from = legendcolors[i];
+        to = legendcolors[i + 1];
 
         labels.push(
                 '<i style="background:' + getColor(from ) + '"></i> ' +
@@ -178,7 +179,7 @@ info.addTo(map);
 
 
 //adds the legend
-legend.addTo(map);
+
 
 
 function updateChart(){
@@ -189,5 +190,6 @@ function updateChart(){
 
     sortedAccidentsData = accidentsArray;
     updateBarChart();
+    legend.addTo(map);
 }
 
