@@ -58,6 +58,13 @@ function updateBarChart(showPerProvince){
             categories: xAxisCategories
         },
 
+        yAxis: {
+      	    title: {
+        	    text: 'Percentage %'
+            }
+        },
+
+
         series: [{
             type: 'bar',
             //colorByPoint: true,
@@ -67,7 +74,7 @@ function updateBarChart(showPerProvince){
          chart:{
              inverted:true,
              backgroundColor: '#FAFAFA'
-         },
+        },
 
          navigation: {
             buttonOptions: {
