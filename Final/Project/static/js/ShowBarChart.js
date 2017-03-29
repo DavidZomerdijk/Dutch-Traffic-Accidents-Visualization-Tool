@@ -23,6 +23,7 @@ function updateBarChart(showPerProvince){
     xAxisCategories = [];
     seriesData = [];
     subtitle = 'per capita per province';
+    yAxisName = 'Percentage %'
 
     if(!showPerProvince)
     {
@@ -40,6 +41,8 @@ function updateBarChart(showPerProvince){
         seriesData.push(province.values.accidents);
         });
         subtitle = 'per province';
+        yAxisName = '#accidents'
+
     }
 
 
@@ -62,7 +65,7 @@ function updateBarChart(showPerProvince){
 
         yAxis: {
       	    title: {
-        	    text: 'Percentage %'
+        	    text: yAxisName
             }
         },
 
