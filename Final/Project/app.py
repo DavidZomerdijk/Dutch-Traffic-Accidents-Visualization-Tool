@@ -88,23 +88,22 @@ def getProvinceBounds():
 
 
 @app.route("/dataCoordinates")
-@app.route("/dataCoordinates/<int:year>/<int:minTijd>/<int:maxTijd>")
-def dataCoordinates(year= 2015,minTijd=0, maxTijd=24 ):
-    #filter on year
-    data_filtered = accidentData[ (accidentData["JAAR_VKL"] == year)]
+@app.route("/dataCoordinates/<int:year>/<int:minTijd>/<int:maxTijd>/<weer>")
+def dataCoordinates(year= 2015,minTijd=0, maxTijd=24, weer='all' ):
+    global data_filtered
+    if weer == "all":
+        data_filtered = accidentData[ accidentData["JAAR_VKL"] == year   ]
+    else:
+        data_filtered = accidentData[ accidentData["JAAR_VKL"] == year   ][accidentData["WGD_CODE_1"] == str(weer)]
 
     #filter on province
-    output = data_filtered[data_filtered["PVE_NAAM"] == currentProvince]
+    data_filtered = data_filtered[data_filtered["PVE_NAAM"] == currentProvince]
 
     #filter on time
-    output = output[ (output["UUR"] >= minTijd) & (output["UUR"] <= maxTijd) ]
-
-    #only take lat lon
-    output = output[['lat', 'lon']]
+    data_filtered = data_filtered[ (data_filtered["UUR"] >= minTijd) & (data_filtered["UUR"] <= maxTijd) ]
 
     #group and sum
-    output = output[['lat', 'lon']].groupby(['lat', 'lon']).size().reset_index(name="accidents")
-
+    output = data_filtered[['lat', 'lon']].groupby(['lat', 'lon']).size().reset_index(name="accidents")
 
     return output.to_json(orient="records")
 
@@ -113,7 +112,7 @@ def dataCoordinates(year= 2015,minTijd=0, maxTijd=24 ):
 @app.route("/dangerousPoints/<int:distance>")
 @app.route("/dangerousPoints/<int:distance>/<int:year>")
 def dangerousPoints(distance=1, year=2015):
-    data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
+    # data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
     return flask.jsonify( {"dangerousPoints" : dangerPoints(data_filtered, distance)})
 
 def dangerPoints(df, d=1):
