@@ -36,11 +36,14 @@ def data(year= 2015,minTijd=0, maxTijd=24, weer='all'  ):
     min_color_value = 1000.0
     provinces = ["Noord-Holland", "Zuid-Holland", "Groningen", "Friesland", "Drenthe", "Overijssel", "Flevoland", "Gelderland", "Utrecht", "Zeeland", "Noord-Brabant", "Limburg"]
     if weer == "all":
-        result = accidentData[ accidentData["JAAR_VKL"] == year   ]
+        data_filtered = accidentData[ accidentData["JAAR_VKL"] == year   ]
     else:
-        result = accidentData[ accidentData["JAAR_VKL"] == year   ][accidentData["WGD_CODE_1"] == str(weer)]
+        data_filtered = accidentData[ accidentData["JAAR_VKL"] == year   ][accidentData["WGD_CODE_1"] == str(weer)]
 
-    output = result["PVE_NAAM"].value_counts().to_json(orient="columns")
+    # filter on time
+    data_filtered = data_filtered[(data_filtered["UUR"] >= minTijd) & (data_filtered["UUR"] <= maxTijd)]
+
+    output = data_filtered["PVE_NAAM"].value_counts().to_json(orient="columns")
 
     #here we add the population data
     outputDict = {}

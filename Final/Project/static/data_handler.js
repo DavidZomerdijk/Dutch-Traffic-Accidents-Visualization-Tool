@@ -30,13 +30,7 @@ var callback = function (d) {
     console.log( provinceData )
 }
 
-// Load the data.
-function update() {
-    d3.json("/data/" + String(year) + "/" + String(minTijd) + "/" +String( maxTijd ) +"/" +String(weer), callback)
-};
 
-
-update()
 
 function changeWeer(d){
     weer = d;
@@ -110,6 +104,14 @@ $( "#slider-range" ).slider({
 $( "#amount" ).val(  $( "#slider-range" ).slider( "values", 0 ) +
   "h - " + $( "#slider-range" ).slider( "values", 1 ) + "h");
 } );
+
+// Load the data.
+function update() {
+    d3.json("/data/" + String(year) + "/" + String(minTijd) + "/" +String( maxTijd ) +"/" +String(weer), callback)
+};
+
+
+update()
 
 
 
