@@ -2,9 +2,9 @@ var weathercondition = "all";
 var selected_year = 2009;
 
 d3.select("#slider").on("input", function() {
-    selected_year = String(+this.value)
+    selected_year = String(+this.value);
     update( String(+this.value));
-    updateweer(weathercondition)
+    updateweer(weathercondition);
 });
 
 function weather(value)

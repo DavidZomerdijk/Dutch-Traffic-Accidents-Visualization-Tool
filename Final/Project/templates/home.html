@@ -90,28 +90,10 @@
 
 
         <div class="col-md-6"><br></div>
-        <div class="col-md-2 table-bordered">
 
-            <p><strong>Gender</strong></p>
-            <label  id="male" class="checkbox-inline "><input type="checkbox" value="">Male</label>
-            <label id="female" class="checkbox-inline"><input type="checkbox" value="">Female</label>
-        </div>
-        <div class="col-md-3 table-bordered">
-            <p><strong>Age</strong></p>
-            <label id="age1" class="checkbox-inline"><input type="checkbox" value=""><18</label>
-            <label id="age2" class="checkbox-inline"><input type="checkbox" value="">18-30</label>
-            <label id="age3" class="checkbox-inline"><input type="checkbox" value="">30-50</label>
-            <label id="age4" class="checkbox-inline"><input type="checkbox" value="">50+</label>
-        </div>
-        <div class="col-md-4 table-bordered">
+        <div class="col-md-6 table-bordered">
             <p><strong>Weather Conditions</strong></p>
-            <label id="storm" class="checkbox-inline"><input type="checkbox" value="">Storm</label>
-            <label id="rain" class="checkbox-inline"><input type="checkbox" value="">Rain</label>
-            <label id="fog" class="checkbox-inline"><input type="checkbox" value="">Fog</label>
-            <label id="snow" class="checkbox-inline"><input type="checkbox" value="">Snow</label>
-            <label id="sunny" class="checkbox-inline"><input type="checkbox" value="">Sunny</label>
-        </div>
-        <select id ="weather" class="col-md-1" name="weather" onmousedown="this.value='';" onchange="weather(this.value);">
+        <select id ="weather" class="col-md-1" name="weather" onchange="weather(this.value);">
             <option value="all">All</option>
             <option value="D">Dry</option>
             <option value="R">Rain</option>
@@ -120,6 +102,8 @@
             <option value="H">Hard wind</option>
             <option value="O">Unknown</option>
         </select>
+        </div>
+
         <div id="history" class="col-md-6 table-bordered">
             <p><strong>History</strong></p>
 
