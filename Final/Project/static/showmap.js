@@ -126,7 +126,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-            labels = ['<b width="100px!important">Accidents<br> per capita (in %):</b><br>'],
+            labels = ['<b width="100px!important">Traffic accidents<br> per capita (in %):</b><br>'],
             legendcolors = [(maxcolorvalue-(8*diffvalue)).toFixed(2),(maxcolorvalue-(7*diffvalue)).toFixed(2),(maxcolorvalue-(6*diffvalue)).toFixed(2),(maxcolorvalue-(5*diffvalue)).toFixed(2),(maxcolorvalue-(4*diffvalue)).toFixed(2),(maxcolorvalue-(3*diffvalue)).toFixed(2),(maxcolorvalue-(2*diffvalue)).toFixed(2),(maxcolorvalue-(1*diffvalue)).toFixed(2)],
             from, to;
 
