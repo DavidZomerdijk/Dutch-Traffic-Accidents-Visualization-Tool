@@ -23,7 +23,7 @@ info.update = function(props, data) {
 
     this._div.innerHTML = (props ?  '<p style="font-size:150%!important;color:#1A1E1F">'+ props.OMSCHRIJVI  + '</p>' +
     '<p color="black">#accidents:</p>' +  '<p style="color:#1A1E1F">' +  String(accidents) + '</p>' +  '<p color="black">Accidents per capita:</p>' + '<p style="color:#1A1E1F">' + accidents_per_capita + '</p>'
-            : 'Hover over a state');
+            : 'Hover over a province');
 };
 
 
