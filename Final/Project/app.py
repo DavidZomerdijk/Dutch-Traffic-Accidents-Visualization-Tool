@@ -29,6 +29,7 @@ def index():
 @app.route("/data/<int:year>")
 @app.route("/data/<int:year>/<weer>")
 def data(year= 2015 , weer = "all" ):
+    provinces = ["Noord-Holland", "Zuid-Holland", "Groningen", "Friesland", "Drenthe", "Overijssel", "Flevoland", "Gelderland", "Utrecht", "Zeeland", "Noord-Brabant", "Limburg"]
     if weer == "all":
         result = accidentData[ accidentData["JAAR_VKL"] == year   ]
     else:
@@ -40,8 +41,12 @@ def data(year= 2015 , weer = "all" ):
     outputDict = {}
     for key, value in json.loads(output).items():
         outputDict[key] = {"accidents": value, "per_capita": round((int(value) / populationData[key] ), 5)}
+        provinces.remove(key)
         #   weather = result[(result["PVE_NAAM"] == key)]["WGD_CODE_1"]
         #"weather":weather.value_counts().to_json(orient="columns"),
+
+    for prov in provinces:
+        outputDict[prov] = {"accidents": 0, "per_capita": 0}
     return json.dumps(outputDict)
 
 #######################################
