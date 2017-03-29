@@ -24,6 +24,11 @@ function update() {
 
 update()
 
+function changeWeer(d){
+    weer = d;
+    update()
+}
+
 
 //FILTERS
 //standard button for dangerous accidents
