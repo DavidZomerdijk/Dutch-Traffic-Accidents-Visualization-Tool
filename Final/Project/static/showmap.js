@@ -1,6 +1,9 @@
 // control that shows state info on hover
 var info = L.control();
 var provinceData;
+var maxcolorvalue = 1000;
+var mincolorvalue = 0;
+var diffvalue = 0;
 
 info.onAdd = function (map) {
     this._div = L.DomUtil.create('div', 'info');
@@ -26,13 +29,14 @@ info.update = function(props, data) {
 
 //controls the colors for the provinces
 function getColor(d) {
-    return d > 0.01 ? '#800026' :
-            d > 0.009 ? '#BD0026' :
-            d > 0.008 ? '#E31A1C' :
-            d > 0.007  ? '#FC4E2A' :
-            d > 0.006   ? '#FD8D3C' :
-            d > 0.005   ? '#FEB24C' :
-            d > 0.004   ? '#FED976' :
+
+    return d > (maxcolorvalue-(1*diffvalue)) ? '#800026' :
+            d > (maxcolorvalue-(2*diffvalue)) ? '#BD0026' :
+            d > (maxcolorvalue-(3*diffvalue)) ? '#E31A1C' :
+            d > (maxcolorvalue-(4*diffvalue))  ? '#FC4E2A' :
+            d > (maxcolorvalue-(5*diffvalue))   ? '#FD8D3C' :
+            d > (maxcolorvalue-(6*diffvalue))   ? '#FEB24C' :
+            d > (maxcolorvalue-(7*diffvalue))   ? '#FED976' :
                        '#FFEDA0' ;
 }
 

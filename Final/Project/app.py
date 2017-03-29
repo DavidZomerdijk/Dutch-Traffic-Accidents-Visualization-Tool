@@ -14,6 +14,8 @@ import pickle
 PATH_TO_DATA = "../../Data/verkeersOngelukkenNederland.p"
 app = flask.Flask(__name__)
 
+max_color_value = 0.0
+min_color_value = 1000.0
 
 #######################################
 # this is for the main map
@@ -29,6 +31,11 @@ def index():
 @app.route("/data/<int:year>")
 @app.route("/data/<int:year>/<weer>")
 def data(year= 2015 , weer = "all" ):
+    global max_color_value
+    global min_color_value
+    max_color_value = 0.0
+    min_color_value = 1000.0
+    provinces = ["Noord-Holland", "Zuid-Holland", "Groningen", "Friesland", "Drenthe", "Overijssel", "Flevoland", "Gelderland", "Utrecht", "Zeeland", "Noord-Brabant", "Limburg"]
     if weer == "all":
         result = accidentData[ accidentData["JAAR_VKL"] == year   ]
     else:
@@ -40,9 +47,23 @@ def data(year= 2015 , weer = "all" ):
     outputDict = {}
     for key, value in json.loads(output).items():
         outputDict[key] = {"accidents": value, "per_capita": round((int(value) / populationData[key] ), 5)}
+        provinces.remove(key)
         #   weather = result[(result["PVE_NAAM"] == key)]["WGD_CODE_1"]
         #"weather":weather.value_counts().to_json(orient="columns"),
+        if max_color_value < round((int(value) / populationData[key]), 5):
+            max_color_value = round((int(value) / populationData[key]), 5)
+        if min_color_value > round((int(value) / populationData[key]), 5):
+            min_color_value = round((int(value) / populationData[key]), 5)
+
+    for prov in provinces:
+        outputDict[prov] = {"accidents": 0, "per_capita": 0}
     return json.dumps(outputDict)
+
+@app.route("/maxvalue")
+def maxvalue():
+    global max_color_value
+    global min_color_value
+    return flask.jsonify({"max_value"  : str(max_color_value), "min_value" : str(min_color_value)})
 
 #######################################
 # this is for the pointMap
@@ -88,22 +109,23 @@ def getProvinceBounds():
 
 
 @app.route("/dataCoordinates")
-@app.route("/dataCoordinates/<int:year>/<int:minTijd>/<int:maxTijd>/<weer>")
-def dataCoordinates(year= 2015,minTijd=0, maxTijd=24, weer='all' ):
-    global data_filtered
-    if weer == "all":
-        data_filtered = accidentData[ accidentData["JAAR_VKL"] == year   ]
-    else:
-        data_filtered = accidentData[ accidentData["JAAR_VKL"] == year   ][accidentData["WGD_CODE_1"] == str(weer)]
+@app.route("/dataCoordinates/<int:year>/<int:minTijd>/<int:maxTijd>")
+def dataCoordinates(year= 2015,minTijd=0, maxTijd=24 ):
+    #filter on year
+    data_filtered = accidentData[ (accidentData["JAAR_VKL"] == year)]
 
     #filter on province
-    data_filtered = data_filtered[data_filtered["PVE_NAAM"] == currentProvince]
+    output = data_filtered[data_filtered["PVE_NAAM"] == currentProvince]
 
     #filter on time
-    data_filtered = data_filtered[ (data_filtered["UUR"] >= minTijd) & (data_filtered["UUR"] <= maxTijd) ]
+    output = output[ (output["UUR"] >= minTijd) & (output["UUR"] <= maxTijd) ]
+
+    #only take lat lon
+    output = output[['lat', 'lon']]
 
     #group and sum
-    output = data_filtered[['lat', 'lon']].groupby(['lat', 'lon']).size().reset_index(name="accidents")
+    output = output[['lat', 'lon']].groupby(['lat', 'lon']).size().reset_index(name="accidents")
+
 
     return output.to_json(orient="records")
 
@@ -112,7 +134,7 @@ def dataCoordinates(year= 2015,minTijd=0, maxTijd=24, weer='all' ):
 @app.route("/dangerousPoints/<int:distance>")
 @app.route("/dangerousPoints/<int:distance>/<int:year>")
 def dangerousPoints(distance=1, year=2015):
-    # data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
+    data_filtered = accidentData[ accidentData["JAAR_VKL"] == year][accidentData["PVE_NAAM"] == currentProvince ]
     return flask.jsonify( {"dangerousPoints" : dangerPoints(data_filtered, distance)})
 
 def dangerPoints(df, d=1):
