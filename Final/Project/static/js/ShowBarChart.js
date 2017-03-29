@@ -1,13 +1,48 @@
 var chart;
-function updateBarChart(){
+
+
+function sortAccidentsOnAccidents(a,b) {
+    if (a.values.accidents > b.values.accidents)
+        return -1;
+    if (a.values.accidents < b.values.accidents)
+        return 1;
+    return 0;
+}
+
+function sortAccidentsOnCapita(a,b) {
+    if (a.values.per_capita > b.values.per_capita)
+        return -1;
+    if (a.values.per_capita < b.values.per_capita)
+        return 1;
+    return 0;
+}
+
+
+function updateBarChart(showPerProvince){
 
     xAxisCategories = [];
     seriesData = [];
+    subtitle = 'per capita per province';
 
-    sortedAccidentsData.forEach(function(province) {
+    if(!showPerProvince)
+    {
+        sortedAccidentsData.sort(sortAccidentsOnCapita);
+        sortedAccidentsData.forEach(function(province) {
+        xAxisCategories.push(province.provinceName);
+        seriesData.push(province.values.per_capita);
+        });
+    }
+    else
+    {
+        sortedAccidentsData.sort(sortAccidentsOnAccidents);
+        sortedAccidentsData.forEach(function(province) {
         xAxisCategories.push(province.provinceName);
         seriesData.push(province.values.accidents);
-    });
+        });
+        subtitle = 'per province';
+    }
+
+
 
      chart = Highcharts.chart('container', {
 
@@ -16,7 +51,7 @@ function updateBarChart(){
         },
 
         subtitle: {
-            text: 'per province'
+            text: subtitle
         },
 
         xAxis: {
@@ -31,7 +66,7 @@ function updateBarChart(){
         }],
          chart:{
              inverted:true,
-             backgroundColor: '#dddddd'
+             backgroundColor: '#FAFAFA'
          },
 
          navigation: {
@@ -80,5 +115,15 @@ function updateBarChart(){
                 text: 'Polar'
             }
         });
+    });
+
+    var showPerProvince = false;
+    $('#perProvince').click(function () {
+        updateBarChart(true);
+
+    });
+
+    $('#perCapita').click(function () {
+        updateBarChart(false);
     });
 }
